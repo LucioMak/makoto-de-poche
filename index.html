@@ -978,7 +978,18 @@ document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
   function show(html){help.innerHTML=html;help.hidden=false;}
   var iosHelp='<b>Sur iPhone, dans Safari :</b><ol><li>Touche <b>Partager</b> (carré avec une flèche ↑, parfois dans •••)</li><li>Choisis <b>« Sur l\'écran d\'accueil »</b></li><li>Touche <b>Ajouter</b></li></ol>'+(/CriOS|FxiOS|GSA|FBAN|Instagram/i.test(ua)?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Safari</b>.</p>':'');
   var andHelp='<b>Sur Android :</b><ol><li>Touche le menu <b>⋮</b> (en haut à droite)</li><li>Choisis <b>« Installer l\'application »</b> ou <b>« Ajouter à l\'écran d\'accueil »</b></li></ol>'+(inApp?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Chrome</b> (menu ⋮ → « Ouvrir dans Chrome »).</p>':'');
-  if(ios){go.hidden=true;show(iosHelp);}
+  var path=location.host+location.pathname+"?install="+(ios?"ios":"android");
+  var notChrome=!ios&&(!/Chrome\//.test(ua)||/OPR|Opera|SamsungBrowser|EdgA|Firefox|YaBrowser|UCBrowser|MiuiBrowser|HuaweiBrowser|wv\)|FBAN|FBAV|Instagram|GSA\//.test(ua));
+  var notSafari=ios&&/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA|FBAN|FBAV|Instagram/.test(ua);
+  if(notChrome){
+    go.textContent="Ouvrir dans Chrome";
+    show('Pour installer Makoto, il faut ouvrir l\'appli dans <b>Google Chrome</b>. Touche le bouton ci-dessus.');
+    go.addEventListener("click",function(e){e.stopImmediatePropagation();location.href="intent://"+path+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://play.google.com/store/apps/details?id=com.android.chrome")+";end";},true);
+  } else if(notSafari){
+    go.textContent="Ouvrir dans Safari";
+    show('Pour installer Makoto, il faut ouvrir l\'appli dans <b>Safari</b>. Touche le bouton ci-dessus.<br><small>Si rien ne se passe : copie le lien et colle-le dans Safari.</small>');
+    go.addEventListener("click",function(e){e.stopImmediatePropagation();location.href="x-safari-https://"+path;},true);
+  } else if(ios){go.hidden=true;show(iosHelp);}
   go.addEventListener("click",function(){
     if(deferred){deferred.prompt();deferred.userChoice.then(function(c){if(c.outcome==="accepted"){box.hidden=true;try{localStorage.setItem("mk-inst","ok")}catch(e){}}});deferred=null;}
     else show(andHelp);
