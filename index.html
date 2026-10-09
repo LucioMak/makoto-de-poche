@@ -942,58 +942,54 @@ document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
 <div id="inst" class="inst" hidden>
   <div class="inst-card">
     <img src="icon-512.png" alt="" class="inst-logo">
+    <div id="inst-tag" class="inst-tag"></div>
     <div class="inst-title">Installe l'application <span>Makoto</span></div>
     <p class="inst-sub">Horaires, stages, katas, inscriptions : tout le club dans ton téléphone.</p>
-    <button type="button" id="inst-go" class="inst-btn">Installer Makoto</button>
+    <a id="inst-go" class="inst-btn" href="Makoto.apk" download="Makoto.apk">Télécharger l'application</a>
     <div id="inst-help" class="inst-help" hidden></div>
   </div>
 </div>
 <style>
 .inst{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(20,12,15,.72);backdrop-filter:blur(6px)}
 .inst-card{width:100%;max-width:380px;background:#fff;color:#1b1517;border-radius:24px;padding:26px 22px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-.inst-logo{width:110px;height:110px}
+.inst-logo{display:block;width:110px;height:110px;margin:0 auto 10px}
 .inst-title{font-family:var(--display,system-ui);font-weight:800;font-size:22px;line-height:1.2;margin:8px 0 6px}
 .inst-title span{color:#d41f2c}
 .inst-sub{margin:0 0 18px;color:#5a5156;font-size:15px}
-.inst-btn{width:100%;border:0;cursor:pointer;font:inherit;font-weight:800;font-size:18px;color:#fff;padding:16px;border-radius:14px;background:linear-gradient(135deg,#d41f2c,#8e1530);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.inst-btn{display:block;box-sizing:border-box;text-decoration:none;text-align:center;width:100%;border:0;cursor:pointer;font:inherit;font-weight:800;font-size:18px;color:#fff;padding:16px;border-radius:14px;background:linear-gradient(135deg,#d41f2c,#8e1530);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
 .inst-help{margin-top:14px;text-align:left;background:#f7f1f2;border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.5}
 .inst-help b{color:#8e1530}
-.inst-help ol{margin:6px 0 0;padding-left:20px}
+.inst-help ol{margin:6px 0 0;padding-left:20px}.inst-help li{margin:4px 0}.inst-tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.5px;color:#fff;background:#2f8f5b;border-radius:99px;padding:3px 10px;margin-bottom:10px}
 .inst-skip{margin-top:12px;border:0;background:none;color:#7a6f73;font:inherit;font-size:14px;text-decoration:underline;cursor:pointer}
 </style>
 <script>
 (function(){
-  var standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
-  if(standalone)return;
-  var q=new URLSearchParams(location.search), forced=q.get("install");
-  var ua=navigator.userAgent, mobile=/Android|iPhone|iPad|iPod/i.test(ua)||(navigator.maxTouchPoints>1&&/Mac/.test(ua));
-  if(!mobile&&!forced)return;
-  var ios=/iPhone|iPad|iPod/i.test(ua)||(forced==="ios");
-  if(forced==="android")ios=false;
-  var inApp=/FBAN|FBAV|Instagram|Line|wv\)|GSA\//i.test(ua);
-  var box=document.getElementById("inst"),go=document.getElementById("inst-go"),help=document.getElementById("inst-help"),skip=null;
-  var deferred=null;
-  addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e;});
-  addEventListener("appinstalled",function(){box.hidden=true;try{localStorage.setItem("mk-inst","ok")}catch(e){}});
-  function show(html){help.innerHTML=html;help.hidden=false;}
-  var iosHelp='<b>Sur iPhone, dans Safari :</b><ol><li>Touche <b>Partager</b> (carré avec une flèche ↑, parfois dans •••)</li><li>Choisis <b>« Sur l\'écran d\'accueil »</b></li><li>Touche <b>Ajouter</b></li></ol>'+(/CriOS|FxiOS|GSA|FBAN|Instagram/i.test(ua)?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Safari</b>.</p>':'');
-  var andHelp='<b>Sur Android :</b><ol><li>Touche le menu <b>⋮</b> (en haut à droite)</li><li>Choisis <b>« Installer l\'application »</b> ou <b>« Ajouter à l\'écran d\'accueil »</b></li></ol>'+(inApp?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Chrome</b> (menu ⋮ → « Ouvrir dans Chrome »).</p>':'');
-  var path=location.host+location.pathname+"?install="+(ios?"ios":"android");
-  var notChrome=!ios&&(!/Chrome\//.test(ua)||/OPR|Opera|SamsungBrowser|EdgA|Firefox|YaBrowser|UCBrowser|MiuiBrowser|HuaweiBrowser|wv\)|FBAN|FBAV|Instagram|GSA\//.test(ua));
-  var notSafari=ios&&/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA|FBAN|FBAV|Instagram/.test(ua);
-  if(notChrome){
-    go.textContent="Ouvrir dans Chrome";
-    show('Pour installer Makoto, il faut ouvrir l\'appli dans <b>Google Chrome</b>. Touche le bouton ci-dessus.');
-    go.addEventListener("click",function(e){e.stopImmediatePropagation();location.href="intent://"+path+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://play.google.com/store/apps/details?id=com.android.chrome")+";end";},true);
-  } else if(notSafari){
-    go.textContent="Ouvrir dans Safari";
-    show('Pour installer Makoto, il faut ouvrir l\'appli dans <b>Safari</b>. Touche le bouton ci-dessus.<br><small>Si rien ne se passe : copie le lien et colle-le dans Safari.</small>');
-    go.addEventListener("click",function(e){e.stopImmediatePropagation();location.href="x-safari-https://"+path;},true);
-  } else if(ios){go.hidden=true;show(iosHelp);}
-  go.addEventListener("click",function(){
-    if(deferred){deferred.prompt();deferred.userChoice.then(function(c){if(c.outcome==="accepted"){box.hidden=true;try{localStorage.setItem("mk-inst","ok")}catch(e){}}});deferred=null;}
-    else show(andHelp);
-  });
+  var q=new URLSearchParams(location.search), forced=q.get("install"), ua=navigator.userAgent;
+  addEventListener("beforeinstallprompt",function(e){e.preventDefault();});
+  var app=false;
+  if(q.get("src")==="apk"||/; wv\)/.test(ua)){try{localStorage.setItem("mk-app","1")}catch(e){} app=true;}
+  try{if(localStorage.getItem("mk-app")==="1")app=true}catch(e){}
+  if(app||matchMedia("(display-mode: standalone)").matches||navigator.standalone===true)return;
+  var android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.maxTouchPoints>1&&/Macintosh/.test(ua));
+  if(forced==="android"){android=true;ios=false} if(forced==="ios"){ios=true;android=false}
+  if(!android&&!ios)return;
+  var box=document.getElementById("inst"),go=document.getElementById("inst-go"),help=document.getElementById("inst-help"),tag=document.getElementById("inst-tag");
+  function show(h){help.innerHTML=h;help.hidden=false;}
+  if(android){
+    tag.textContent="ANDROID · GRATUIT";
+    show('<ol><li>Touche <b>Télécharger l\'application</b>.</li><li>Ouvre le fichier <b>Makoto.apk</b> (notification « Téléchargement terminé » ou dossier <b>Téléchargements</b>).</li><li>Si le téléphone affiche <b>« Source inconnue »</b> : touche <b>Paramètres</b> → active <b>« Autoriser cette source »</b> → reviens en arrière.</li><li>Touche <b>Installer</b>. Si Play Protect s\'affiche : <b>« Installer quand même »</b>.</li></ol><p style="margin:8px 0 0">L\'icône <b>Makoto</b> apparaît sur ton écran d\'accueil. ✅</p>');
+  } else {
+    tag.textContent="IPHONE · GRATUIT"; tag.style.background="#1b1517";
+    var notSafari=/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA|FBAN|FBAV|Instagram|; wv\)/.test(ua);
+    if(notSafari){
+      go.textContent="Ouvrir dans Safari"; go.removeAttribute("download");
+      go.href="x-safari-https://"+location.host+location.pathname+"?install=ios";
+      show('L\'installation sur iPhone se fait depuis <b>Safari</b>. Touche le bouton ci-dessus.<br><small>Si rien ne se passe : copie le lien et colle-le dans Safari.</small>');
+    } else {
+      go.hidden=true;
+      show('<b>Dans Safari :</b><ol><li>Touche les <b>3 points « ••• »</b> en bas à droite<br><small>(ou le bouton <b>Partager</b> : carré avec une flèche ↑)</small></li><li>Touche <b>Partager</b>, puis <b>« Sur l\'écran d\'accueil »</b> (fais défiler si besoin)</li><li>Laisse <b>« Ouvrir comme app web »</b> activé et touche <b>Ajouter</b></li></ol><p style="margin:8px 0 0">L\'icône <b>Makoto</b> apparaît sur ton écran d\'accueil. ✅</p>');
+    }
+  }
   box.hidden=false;
 })();
 </script>
