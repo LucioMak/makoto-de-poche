@@ -939,6 +939,53 @@ b.addEventListener("click",()=>{const r=matchMedia("(prefers-reduced-motion: red
 q.addEventListener("input",()=>{const v=norm(q.value.trim());document.querySelectorAll("#lexique .lx li").forEach(li=>{li.hidden=v&&!norm(li.dataset.q).includes(v)});});})();
 document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
 </script>
+<div id="inst" class="inst" hidden>
+  <div class="inst-card">
+    <img src="icon-512.png" alt="" class="inst-logo">
+    <div class="inst-title">Installe l'application <span>Makoto</span></div>
+    <p class="inst-sub">Horaires, stages, katas, inscriptions : tout le club dans ton téléphone.</p>
+    <button type="button" id="inst-go" class="inst-btn">Installer Makoto</button>
+    <div id="inst-help" class="inst-help" hidden></div>
+  </div>
+</div>
+<style>
+.inst{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(20,12,15,.72);backdrop-filter:blur(6px)}
+.inst-card{width:100%;max-width:380px;background:#fff;color:#1b1517;border-radius:24px;padding:26px 22px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.inst-logo{width:110px;height:110px}
+.inst-title{font-family:var(--display,system-ui);font-weight:800;font-size:22px;line-height:1.2;margin:8px 0 6px}
+.inst-title span{color:#d41f2c}
+.inst-sub{margin:0 0 18px;color:#5a5156;font-size:15px}
+.inst-btn{width:100%;border:0;cursor:pointer;font:inherit;font-weight:800;font-size:18px;color:#fff;padding:16px;border-radius:14px;background:linear-gradient(135deg,#d41f2c,#8e1530);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.inst-help{margin-top:14px;text-align:left;background:#f7f1f2;border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.5}
+.inst-help b{color:#8e1530}
+.inst-help ol{margin:6px 0 0;padding-left:20px}
+.inst-skip{margin-top:12px;border:0;background:none;color:#7a6f73;font:inherit;font-size:14px;text-decoration:underline;cursor:pointer}
+</style>
+<script>
+(function(){
+  var standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  if(standalone)return;
+  var q=new URLSearchParams(location.search), forced=q.get("install");
+  var ua=navigator.userAgent, mobile=/Android|iPhone|iPad|iPod/i.test(ua)||(navigator.maxTouchPoints>1&&/Mac/.test(ua));
+  if(!mobile&&!forced)return;
+  var ios=/iPhone|iPad|iPod/i.test(ua)||(forced==="ios");
+  if(forced==="android")ios=false;
+  var inApp=/FBAN|FBAV|Instagram|Line|wv\)|GSA\//i.test(ua);
+  var box=document.getElementById("inst"),go=document.getElementById("inst-go"),help=document.getElementById("inst-help"),skip=null;
+  var deferred=null;
+  addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e;});
+  addEventListener("appinstalled",function(){box.hidden=true;try{localStorage.setItem("mk-inst","ok")}catch(e){}});
+  function show(html){help.innerHTML=html;help.hidden=false;}
+  var iosHelp='<b>Sur iPhone, dans Safari :</b><ol><li>Touche <b>Partager</b> (carré avec une flèche ↑, parfois dans •••)</li><li>Choisis <b>« Sur l\'écran d\'accueil »</b></li><li>Touche <b>Ajouter</b></li></ol>'+(/CriOS|FxiOS|GSA|FBAN|Instagram/i.test(ua)?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Safari</b>.</p>':'');
+  var andHelp='<b>Sur Android :</b><ol><li>Touche le menu <b>⋮</b> (en haut à droite)</li><li>Choisis <b>« Installer l\'application »</b> ou <b>« Ajouter à l\'écran d\'accueil »</b></li></ol>'+(inApp?'<p style="margin:8px 0 0">⚠️ Ouvre d\'abord ce lien dans <b>Chrome</b> (menu ⋮ → « Ouvrir dans Chrome »).</p>':'');
+  if(ios){go.hidden=true;show(iosHelp);}
+  go.addEventListener("click",function(){
+    if(deferred){deferred.prompt();deferred.userChoice.then(function(c){if(c.outcome==="accepted"){box.hidden=true;try{localStorage.setItem("mk-inst","ok")}catch(e){}}});deferred=null;}
+    else show(andHelp);
+  });
+  box.hidden=false;
+})();
+</script>
 
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body>
