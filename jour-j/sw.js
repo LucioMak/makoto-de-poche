@@ -1,5 +1,5 @@
 /* Notre jour J : met l'appli en cache pour qu'elle marche sans internet. */
-const CACHE = "jourj-v2";
+const CACHE = "jourj-v3";
 const FILES = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/apple-touch-icon.png", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png",
   "./fonts/Poppins-Regular.ttf", "./fonts/Poppins-Medium.ttf", "./fonts/Poppins-Bold.ttf", "./fonts/Caladea-Italic.ttf"];
