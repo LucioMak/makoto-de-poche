@@ -219,12 +219,46 @@ canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-in
 .planswitch{display:flex;gap:12px;margin-top:20px}
 .planswitch button{flex:1;min-height:64px;border-radius:14px;font-weight:700;font-size:16px;text-align:center;background:#fff;box-shadow:inset 0 0 0 2px #E2D6C5;color:var(--soft);line-height:1.2;padding:8px}
 .planswitch button.on{background:var(--ink);color:#fff;box-shadow:inset 0 -4px 0 #000}
+
+/* ---------- v4 : souvenir ---------- */
+.big-title{font-weight:700;font-size:46px;line-height:1;text-align:center;letter-spacing:-.6px;margin-top:4px}
+.big-title span{color:var(--red)}
+.where{font-family:Cal;font-style:italic;font-size:18px;color:var(--soft);text-align:center;margin-top:8px}
+.heartbtn{display:block;margin:12px auto 0;width:min(84vw,330px);padding:0;background:none}
+.since{text-align:center;margin-top:10px}
+.since .n{font-weight:700;font-size:22px}
+.since small{display:block;font-size:15px;color:var(--soft)}
+.anniv{display:flex;align-items:center;gap:12px;margin-top:16px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:inset 0 -4px 0 #E8DCCB}
+.anniv .ai{font-size:30px;flex:none}
+.anniv b{display:block;font-weight:700;font-size:16px}
+.anniv small{display:block;font-size:14px;color:var(--soft)}
+.ptitle2{font-weight:700;font-size:30px;text-align:center;margin-top:18px;line-height:1.1}
+.lead{text-align:center;color:var(--soft);font-size:16px;margin-top:6px}
+.msg{position:relative;border-radius:18px;padding:18px 16px 16px;margin-top:26px;color:#fff;background:var(--c);
+  box-shadow:inset 0 -6px 0 var(--cd), 0 6px 14px rgba(60,30,0,.10)}
+.msg.lt{color:var(--ink)}
+.msg .me{font-size:36px;line-height:1}
+.msg p{font-size:19px;line-height:1.38;font-weight:500;margin-top:8px}
+.thanks{background:#fff;border-radius:18px;padding:16px;margin-top:28px;box-shadow:inset 0 -4px 0 #E8DCCB;font-size:16px;line-height:1.45}
+.thanks h4{font-weight:700;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:#B08D57;margin-bottom:4px}
+.stats{display:flex;gap:10px;margin-top:18px}
+.stat{flex:1;background:#fff;border-radius:14px;padding:10px 6px;text-align:center;box-shadow:inset 0 -4px 0 #E8DCCB}
+.stat b{display:block;font-weight:700;font-size:24px}
+.stat small{display:block;font-size:12.5px;color:var(--soft);line-height:1.2}
+.drow{display:flex;align-items:center;gap:14px;min-height:72px;padding:10px 14px;background:#fff;border-radius:16px;margin-top:12px;box-shadow:inset 0 -4px 0 #E8DCCB}
+.drow .num{flex:none;width:50px;height:44px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:18px;background:var(--red);color:#fff;box-shadow:inset 0 -4px 0 var(--red-d)}
+.drow.todo .num{background:#fff;color:var(--soft);box-shadow:inset 0 0 0 2px #DCCAB2}
+.drow .pt{flex:1;min-width:0}
+.drow .pt b{display:block;font-size:14px;color:var(--soft);font-weight:500}
+.drow .pt span{display:block;font-weight:700;font-size:17px;line-height:1.25}
+.drow .pe{font-size:30px;flex:none}
+.endcard{text-align:center;margin-top:28px;font-family:Cal;font-style:italic;font-size:21px;color:#B08D57}
 </style>
 </head>
 <body>
 <section class="screen" id="home"></section>
-<section class="screen" id="step"></section>
-<section class="screen" id="prog"></section>
+<section class="screen" id="msgs"></section>
+<section class="screen" id="day"></section>
 <div id="ovl" class="ovl"></div>
 <div id="wipe" aria-hidden="true"></div>
 <div id="toast" class="toast" role="status"></div>
@@ -234,94 +268,44 @@ canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-in
 (function(){
 "use strict";
 
-/* ================================================================ data (road-book du 18 octobre) */
+/* ================================================================ data */
 var WEDDING = new Date(2026, 9, 24);
 var COL = {red:["#DA291C","#A11D13"], yel:["#FFC20E","#C99400"], blu:["#0A6EBD","#06508A"], grn:["#00A651","#007A3B"],
   org:["#F7901E","#BE6A0E"], pnk:["#EC6FA5","#B5477A"], pur:["#8E5CC4","#653E95"], azu:["#36AEBF","#1F7F8C"]};
-var TINT = {red:"#FDE3E1", yel:"#FFF1C2", blu:"#DCEBF8", grn:"#D6F2E3", org:"#FEE7CF", pnk:"#FCE1EE", pur:"#ECE2F7", azu:"#D9F1F4"};
-var ROLES = {
-  traiteur:{n:"Traiteur", i:"🍽️", c:"org"}, groupe:{n:"Groupe", i:"🎸", c:"blu"}, dj:{n:"DJ", i:"🎧", c:"pur"},
-  animation:{n:"Animation · Alex", i:"🎲", c:"grn"}, coord:{n:"Coordination · Agnès", i:"📋", c:"azu"}, maries:{n:"Les mariés", i:"💍", c:"red"}
-};
-var PARTS = [{n:"I", t:"Accueil & temps salé"}, {n:"II", t:"Ateliers & set 2"}, {n:"III", t:"Pyramide & départ du traiteur"}, {n:"IV", t:"Jeux & fin de journée"}];
-/* acts: [id, role, text, plan?]  — plan "A" or "B" = only in that plan */
+var MSGS = [
+  ["💍","red","Félicitations Mai-Anh et Philippe ! Le plus beau jour est passé… et ce n'est que le premier d'une longue série."],
+  ["🧱","yel","Une vie à deux se construit comme un cœur en briques : pièce par pièce, avec patience et beaucoup d'amour. Le vôtre est déjà magnifique."],
+  ["🥋","blu","Technique, cœur et persévérance : vous avez tout d'une ceinture noire… de l'amour."],
+  ["🏅","org","Médaille d'or du plus beau mariage de l'année. Sur la première marche du podium, il n'y avait de place que pour vous deux."],
+  ["🎮","grn","Niveau débloqué : mariés ! La suite de l'aventure se joue en mode coopération."],
+  ["🏊","azu","Que votre vie à deux glisse comme une belle longueur de bassin : fluide, joyeuse, toujours côte à côte."],
+  ["🍫","pnk","Pavlova, pyramide de chocolat, bonbons… Que la vie vous garde toujours un petit goût de 24 octobre."],
+  ["🎶","pur","Merci pour les rires, la musique, les jeux et toute cette joie partagée avec ceux que vous aimez."],
+  ["💖","red","Aujourd'hui vous vous êtes dit oui. Demain et tous les jours d'après, on vous souhaite de vous le redire."],
+  ["✨","yel","Plein de bonheur, de tendresse et de projets fous pour la suite. Vive les mariés !"]
+];
+var NOCES = ["coton", "cuir", "froment", "cire", "bois", "chypre", "laine", "coquelicot", "faïence", "étain"];
+/* the programme, to replay the day (same ids as the jour J version) */
 var RAW = [
-  {id:"arrivee", p:0, s:"13:00", e:"13:15", em:"💍", c:"red", t:"Arrivée des mariés", fun:"C'est parti pour le plus beau jour !", acts:[
-    ["arr-buffet","traiteur","Buffet prêt avant notre arrivée"],
-    ["arr-dj","dj","4 titres : Happy · I Gotta Feeling · Love Today · Sun Is Shining"],
-    ["arr-entree","maries","Notre entrée"]]},
-  {id:"discours", p:0, s:"13:15", e:"13:30", em:"🎤", c:"blu", silence:true, t:"Discours des mariés", fun:"Tout le monde vous écoute.", acts:[
-    ["dis-micro","dj","Musique coupée, micros prêts"],
-    ["dis-discours","maries","Notre discours"],
-    ["dis-annonce","maries","On annonce le photobooth, les livres d'or et la fontaine à vœux"]]},
-  {id:"buffet", p:0, s:"13:30", e:"14:00", em:"📸", c:"yel", t:"Buffet salé + photos officielles", fun:"Souriez, c'est pour l'album !",
-    note:"La musique sera coupée de temps en temps pour l'appel des photos.", acts:[
-    ["buf-ouverture","traiteur","Ouverture du buffet + boissons"],
-    ["buf-set1","groupe","Début du set 1 (ou le DJ, à voir avec lui)"],
-    ["buf-photos","animation","Appel des groupes pour les photos"]]},
-  {id:"anims", p:0, s:"14:00", e:"14:40", em:"🍝", c:"grn", t:"Buffet + 2 animations salées", fun:"Barbecue et pâtes dans la meule !", acts:[
-    ["ani-bbq","traiteur","Barbecue et pâtes dans la meule lancés"],
-    ["ani-set1","groupe","Set 1 jusqu'à 14h40"]]},
-  {id:"final", p:0, s:"14:40", e:"15:00", em:"🥁", c:"org", t:"Final sportif avec Tim", fun:"Tim à la batterie !", decide:true,
-    note:"Le salé reste accessible jusqu'à 15h.", acts:[
-    ["fin-survive","groupe","I Will Survive"],
-    ["fin-tim","groupe","Tim : Eye of the Tiger + Seven Nation Army"],
-    ["fin-lego","animation","Atelier Lego préparé"],
-    ["fin-tableau","coord","Tableau des équipes installé"]]},
-  {id:"lego", p:1, only:"A", s:"15:00", e:"15:20", em:"🧱", c:"red", tag:"Saute si retard", t:"Atelier cœur en Lego", fun:"Brique après brique, tous ensemble.",
-    note:"Silence pendant les 5 min de consignes, puis bande son : le groupe et le DJ mangent.", acts:[
-    ["lego-love","coord","Gros « LOVE » installé sur une table"],
-    ["lego-consignes","animation","Consignes données (5 min, silence)"],
-    ["lego-coeur","animation","Cœur en Lego construit et signé"]]},
-  {id:"love", p:1, only:"A", s:"15:20", e:"15:25", em:"📷", c:"pnk", t:"Photos Lego + grand « LOVE »", fun:"La photo souvenir du cœur.", acts:[
-    ["love-photos","animation","Photos avec le cœur en Lego et le grand « LOVE »"]]},
-  {id:"brise", p:1, s:"15:25", e:"15:45", sB:"15:00", eB:"15:20", em:"🧊", c:"azu", silence:true, t:"Brise-glace", fun:"Le jeu pour faire connaissance.",
-    noteB:"Plan B : il prend la place de l'atelier Lego, dès la fin du final sportif. À finir avant la pavlova.", acts:[
-    ["bri-silence","dj","Silence total"],
-    ["bri-jeu","animation","Jeu brise-glace par équipes (20 min)"]]},
-  {id:"creep", p:1, s:"15:45", e:"16:00", em:"🎸", c:"pur", t:"Creep + ouverture du set 2", fun:"Tim ouvre le deuxième set.", acts:[
-    ["cre-creep","groupe","Tim à la batterie : Creep"],
-    ["cre-set2","groupe","Début du set 2"]]},
-  {id:"pavlova", p:1, s:"16:00", e:"16:25", em:"🍓", c:"pnk", fixed:true, t:"Animation pavlova", fun:"Un moment tout doux, en musique.",
-    note:"Démarre à 16h00, même si du retard a été pris avant.", acts:[
-    ["pav-table","coord","Table du centre débarrassée"],
-    ["pav-servie","traiteur","Pavlova servie (25 min)"]]},
-  {id:"pyramide", p:2, s:"16:25", e:"16:45", em:"🍫", c:"org", fixed:true, t:"Pyramide de mousse au chocolat", fun:"Le moment gourmand !",
-    note:"Le traiteur part juste après la mise en place.", acts:[
-    ["pyr-pyramide","traiteur","Pyramide mise en place"],
-    ["pyr-set2","groupe","Fin du set 2 vers 16h45"],
-    ["pyr-love","coord","Gros « LOVE » et table réinstallés pour l'atelier Lego","B"]]},
-  {id:"depart", p:2, s:"16:45", e:"17:00", em:"👋", c:"yel", t:"Départ du traiteur · relais du DJ", fun:"Le DJ prend le relais !", acts:[
-    ["dep-traiteur","traiteur","Départ du traiteur"],
-    ["dep-dj","dj","Relais du DJ après le groupe"],
-    ["dep-ttmc","animation","Annonce du TTMC","A"],
-    ["dep-lego","animation","Annonce de l'atelier Lego","B"]]},
-  {id:"legoB", p:2, only:"B", s:"16:45", e:"17:10", em:"🧱", c:"red", t:"Atelier cœur en Lego (reporté)", fun:"Brique après brique, tous ensemble.",
-    note:"Silence pendant les 5 min de consignes, puis fond musical.", acts:[
-    ["lego-consignes","animation","Consignes données (5 min, silence)"],
-    ["lego-coeur","animation","Cœur en Lego construit et signé"],
-    ["love-photos","animation","Photos avec le cœur en Lego et le grand « LOVE »"]]},
-  {id:"ttmcC", p:3, s:"17:00", e:"17:05", sB:"17:10", eB:"17:15", em:"📣", c:"yel", silence:true, tag:"Si ça prend", t:"Consignes TTMC", fun:"On écoute les règles.",
-    skip:"Pas de TTMC : on passe", acts:[
-    ["tc-silence","dj","Silence total"],
-    ["tc-regles","animation","Règles expliquées au micro"]]},
-  {id:"ttmc", p:3, s:"17:05", e:"17:35", sB:"17:15", eB:"17:45", em:"🧠", c:"grn", tag:"Si ça prend", t:"TTMC mariage", fun:"Tu te mets combien ?",
-    note:"Selon l'ambiance (Agnès, Alex et le DJ) : TTMC seul sans musique, TTMC en même temps que la danse, ou pas de TTMC et on danse.",
-    skip:"Pas de TTMC : on passe", acts:[
-    ["tt-partie","animation","Partie de TTMC"]]},
-  {id:"bonbons", p:3, s:"17:35", e:"17:45", sB:"17:45", eB:"17:55", em:"🍬", c:"pnk", t:"Après le TTMC · bar à bonbons", fun:"Si on a gagné… bonbons !", acts:[
-    ["bon-bar","coord","Bar à bonbons ouvert"],
-    ["bon-dj","dj","Reprise de la musique pour danser"],
-    ["bon-igloo","animation","Loup-garou installé dans l'igloo"]]},
-  {id:"loup", p:3, s:"17:45", e:"18:30", sB:"17:55", em:"🐺", c:"pur", t:"Loup-garou + danse", fun:"Dernière partie… et on danse !",
-    note:"Fin de la musique à 18h30.", acts:[
-    ["lg-partie","animation","Loup-garou dans l'igloo (avec nous)"],
-    ["lg-danse","dj","Danse avec le DJ"],
-    ["lg-fin","dj","Fin de la musique"]]}
+  {id:"arrivee", s:"13:00", em:"💍", t:"Arrivée des mariés", a:["arr-buffet","arr-dj","arr-entree"]},
+  {id:"discours", s:"13:15", em:"🎤", t:"Discours des mariés", a:["dis-micro","dis-discours","dis-annonce"]},
+  {id:"buffet", s:"13:30", em:"📸", t:"Buffet salé + photos officielles", a:["buf-ouverture","buf-set1","buf-photos"]},
+  {id:"anims", s:"14:00", em:"🍝", t:"Buffet + 2 animations salées", a:["ani-bbq","ani-set1"]},
+  {id:"final", s:"14:40", em:"🥁", t:"Final sportif avec Tim", a:["fin-survive","fin-tim","fin-lego","fin-tableau"]},
+  {id:"lego", only:"A", s:"15:00", em:"🧱", t:"Atelier cœur en Lego", a:["lego-love","lego-consignes","lego-coeur"]},
+  {id:"love", only:"A", s:"15:20", em:"📷", t:"Photos Lego + grand « LOVE »", a:["love-photos"]},
+  {id:"brise", s:"15:25", sB:"15:00", em:"🧊", t:"Brise-glace", a:["bri-silence","bri-jeu"]},
+  {id:"creep", s:"15:45", em:"🎸", t:"Creep + ouverture du set 2", a:["cre-creep","cre-set2"]},
+  {id:"pavlova", s:"16:00", em:"🍓", t:"Animation pavlova", a:["pav-table","pav-servie"]},
+  {id:"pyramide", s:"16:25", em:"🍫", t:"Pyramide de mousse au chocolat", a:["pyr-pyramide","pyr-set2"], aB:["pyr-love"]},
+  {id:"depart", s:"16:45", em:"👋", t:"Départ du traiteur · relais du DJ", a:["dep-traiteur","dep-dj"], aA:["dep-ttmc"], aB:["dep-lego"]},
+  {id:"legoB", only:"B", s:"16:45", em:"🧱", t:"Atelier cœur en Lego", a:["lego-consignes","lego-coeur","love-photos"]},
+  {id:"ttmcC", s:"17:00", sB:"17:10", em:"📣", t:"Consignes TTMC", a:["tc-silence","tc-regles"]},
+  {id:"ttmc", s:"17:05", sB:"17:15", em:"🧠", t:"TTMC mariage", a:["tt-partie"]},
+  {id:"bonbons", s:"17:35", sB:"17:45", em:"🍬", t:"Après le TTMC · bar à bonbons", a:["bon-bar","bon-dj","bon-igloo"]},
+  {id:"loup", s:"17:45", sB:"17:55", em:"🐺", t:"Loup-garou + danse", a:["lg-partie","lg-danse","lg-fin"]}
 ];
 function toMin(hm){ var a = hm.split(":"); return (+a[0]) * 60 + (+a[1]); }
-
-/* heart: 17 bricks [row, col, length] placed bottom-up; merged to fit 16 or 15 steps */
 var HB17 = [[7,4,1],[6,3,3],[5,2,2],[5,4,3],[4,1,4],[4,5,3],[3,0,2],[3,2,3],[3,5,4],[2,0,4],[2,4,2],[2,6,3],[1,0,3],[1,3,4],[1,7,2],[0,1,3],[0,5,3]];
 function layout(n){
   var L = HB17.map(function(b){ return b.slice(); });
@@ -332,7 +316,7 @@ function layout(n){
 var HC = [["#DA291C","#A11D13"],["#EC6FA5","#B5477A"],["#F36A60","#B8433A"],["#C21F14","#8C150D"],["#F7A8CB","#C77598"]];
 var HCI = [0,1,3,2,0,4,1,0,2,3,1,0,4,2,0,1,3];
 
-/* ================================================================ storage */
+/* ================================================================ storage (same record as the jour J version: nothing is lost) */
 var KEY = "jourj-maianh-philippe-v3";
 var bridge = (window.JourJ && typeof window.JourJ.load === "function") ? window.JourJ : null;
 function load(){
@@ -343,38 +327,25 @@ function load(){
   try { return raw ? JSON.parse(raw) : null; } catch(e){ return null; }
 }
 var S = load() || {};
-S.v = 3;
-S.done = S.done || {};
-S.sim = S.sim || {on:false, min:14 * 60 + 40};
+S.v = 3; S.done = S.done || {}; S.sim = S.sim || {on:false, min:880};
 if (S.sound === undefined) S.sound = true;
-S.awake = !!S.awake;
 function save(){
   var raw = JSON.stringify(S);
   try { if (bridge) bridge.save(raw); } catch(e){}
   try { localStorage.setItem(KEY, raw); } catch(e){}
 }
+var PLAN = S.plan === "B" ? "B" : "A";
+var DAY = [];
+RAW.forEach(function(r){
+  if (r.only && r.only !== PLAN) return;
+  var acts = r.a.concat(PLAN === "B" ? (r.aB || []) : (r.aA || []));
+  var ts = acts.map(function(id){ return S.done[id] || 0; });
+  var all = ts.every(function(t){ return t > 0; });
+  DAY.push({id:r.id, em:r.em, t:r.t, sm:toMin(PLAN === "B" && r.sB ? r.sB : r.s), done:all, at:all ? Math.max.apply(null, ts) : 0, nActs:acts.length, nDone:ts.filter(function(t){ return t > 0; }).length});
+});
+var N = DAY.length;
 
-/* ================================================================ active programme (plan A or B) */
-var ACTIVE = [], ACT = {}, N = 0;
-function planOf(){ return S.plan === "B" ? "B" : "A"; }
-function build(){
-  var pl = planOf(); ACTIVE = []; ACT = {};
-  RAW.forEach(function(r){
-    if (r.only && r.only !== pl) return;
-    var st = {id:r.id, p:r.p, em:r.em, c:r.c, t:r.t, fun:r.fun, silence:!!r.silence, fixed:!!r.fixed, tag:r.tag, decide:!!r.decide, skip:r.skip,
-      note:(pl === "B" && r.noteB) ? r.noteB : r.note,
-      sm:toMin(pl === "B" && r.sB ? r.sB : r.s), em2:toMin(pl === "B" && r.eB ? r.eB : r.e)};
-    st.moved = pl === "B" && (!!r.sB || r.only === "B");
-    st.acts = [];
-    r.acts.forEach(function(a){ if (a[3] && a[3] !== pl) return; var o = {id:a[0], role:a[1], text:a[2], step:st}; st.acts.push(o); ACT[o.id] = o; });
-    st.i = ACTIVE.length; ACTIVE.push(st);
-  });
-  N = ACTIVE.length;
-}
-build();
-function byId(id){ for (var i = 0; i < ACTIVE.length; i++) if (ACTIVE[i].id === id) return ACTIVE[i]; return null; }
-
-/* ================================================================ feedback: haptics, sound, wake lock */
+/* ================================================================ feedback */
 function haptic(){
   try { if (bridge && bridge.haptic) { bridge.haptic(); return; } } catch(e){}
   try { if (navigator.vibrate) navigator.vibrate(15); } catch(e){}
@@ -396,194 +367,101 @@ function tone(f, t0, dur, type, vol){
   o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.03);
 }
 var SFX = {
-  click: function(){ tone(2600, 0, 0.03, "square", 0.035); tone(1350, 0.01, 0.06, "triangle", 0.09); },
-  unclick: function(){ tone(700, 0, 0.06, "triangle", 0.08); tone(480, 0.04, 0.07, "triangle", 0.06); },
   tap: function(){ tone(1800, 0, 0.025, "triangle", 0.05); },
-  chime: function(){ [1046.5, 1318.5, 1568, 2093].forEach(function(f, k){ tone(f, 0.12 + k * 0.09, 0.4, "triangle", 0.1); }); tone(1500, 0, 0.03, "square", 0.04); },
+  chime: function(){ [1046.5, 1318.5, 1568, 2093].forEach(function(f, k){ tone(f, k * 0.09, 0.4, "triangle", 0.1); }); },
+  snap: function(k){ tone(2400 - (k % 5) * 120, 0, 0.03, "square", 0.03); tone(1300, 0.01, 0.05, "triangle", 0.07); },
   fanfare: function(){ [523.25, 659.25, 783.99, 1046.5, 1318.5, 1568, 2093].forEach(function(f, k){ tone(f, k * 0.11, 0.55, "triangle", 0.1); }); }
 };
-function sfx(n){ try { SFX[n](); } catch(e){} }
-var wl = null;
-function setAwake(on){
-  try { if (bridge && bridge.keepAwake) { bridge.keepAwake(!!on); return; } } catch(e){}
-  try {
-    if (!("wakeLock" in navigator)) return;
-    if (on) navigator.wakeLock.request("screen").then(function(l){ wl = l; }).catch(function(){});
-    else if (wl) { wl.release(); wl = null; }
-  } catch(e){}
-}
+function sfx(n, k){ try { SFX[n](k); } catch(e){} }
 
-/* ================================================================ time */
-function now(){
-  if (S.sim.on) return new Date(2026, 9, 24, Math.floor(S.sim.min / 60), S.sim.min % 60, 0);
-  return new Date();
-}
-function phase(d){
-  var a = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(), b = WEDDING.getTime();
-  return a < b ? "before" : (a > b ? "after" : "day");
-}
+/* ================================================================ helpers */
 function pad(n){ return (n < 10 ? "0" : "") + n; }
 function fmt(min){ return Math.floor(min / 60) + "h" + pad(min % 60); }
 function hm(ts){ var d = new Date(ts); return d.getHours() + "h" + pad(d.getMinutes()); }
-function dur(m){ if (m < 60) return m + " min"; var h = Math.floor(m / 60), r = m % 60; return h + " h" + (r ? " " + pad(r) : ""); }
-function minOf(d){ return d.getHours() * 60 + d.getMinutes(); }
-
-/* ================================================================ state helpers */
-function isDone(a){ return !!S.done[a.id]; }
-function nDone(st){ return st.acts.filter(isDone).length; }
-function stepDone(st){ return nDone(st) === st.acts.length; }
-function current(){ for (var i = 0; i < ACTIVE.length; i++) if (!stepDone(ACTIVE[i])) return ACTIVE[i]; return null; }
-function stepsDone(){ return ACTIVE.filter(stepDone).length; }
-function scheduled(m){ for (var i = 0; i < ACTIVE.length; i++) if (m >= ACTIVE[i].sm && m < ACTIVE[i].em2) return ACTIVE[i]; return null; }
-function nextOpenAfter(i){ for (var k = i + 1; k < ACTIVE.length; k++) if (!stepDone(ACTIVE[k])) return ACTIVE[k]; return current(); }
-
-/* ================================================================ drawing helpers */
 function studs(n){ var s = '<span class="studs">'; for (var i = 0; i < n; i++) s += "<b></b>"; return s + "</span>"; }
-function heartSVG(placed, drop, full){
+function dayDiff(a, b){ return Math.round((new Date(b.getFullYear(), b.getMonth(), b.getDate()) - new Date(a.getFullYear(), a.getMonth(), a.getDate())) / 86400000); }
+function heartSVG(replay){
   var HB = layout(N), cw = 40, ch = 34, sh = 8, W = 9 * cw, H = 8 * ch + sh, s = "";
-  s += '<svg class="heart' + (full ? " full" : "") + '" viewBox="-6 -6 ' + (W + 12) + " " + (H + 12) + '" aria-label="' + placed + " briques sur " + N + '">';
+  s += '<svg class="heart' + (replay ? "" : " full") + '" viewBox="-6 -6 ' + (W + 12) + " " + (H + 12) + '" aria-label="Le cœur en briques complet">';
+  if (replay) HB.forEach(function(b){ s += '<rect class="ghost" x="' + (b[1] * cw + 3) + '" y="' + (sh + b[0] * ch + 3) + '" width="' + (b[2] * cw - 6) + '" height="' + (ch - 6) + '" rx="7"/>'; });
   HB.forEach(function(b, i){
-    if (i < placed) return;
-    s += '<rect class="ghost" x="' + (b[1] * cw + 3) + '" y="' + (sh + b[0] * ch + 3) + '" width="' + (b[2] * cw - 6) + '" height="' + (ch - 6) + '" rx="7"/>';
-  });
-  for (var i = 0; i < placed && i < HB.length; i++) {
-    var b = HB[i], c = HC[HCI[i % HCI.length]], x = b[1] * cw, y = sh + b[0] * ch, w = b[2] * cw;
-    s += '<g class="b' + (i === drop ? " drop" : "") + '">';
+    var c = HC[HCI[i % HCI.length]], x = b[1] * cw, y = sh + b[0] * ch, w = b[2] * cw;
+    s += '<g class="b' + (replay ? " drop" : "") + '"' + (replay ? ' style="animation-delay:' + (i * 150) + 'ms"' : "") + ">";
     for (var k = 0; k < b[2]; k++) s += '<rect x="' + (x + k * cw + 9) + '" y="' + (y - sh + 1) + '" width="' + (cw - 18) + '" height="' + (sh + 3) + '" rx="3" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="2"/>';
     s += '<rect x="' + (x + 1.5) + '" y="' + (y + 1.5) + '" width="' + (w - 3) + '" height="' + (ch - 3) + '" rx="6" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="2.5"/>';
     s += '<rect x="' + (x + 6) + '" y="' + (y + 6) + '" width="' + (w - 12) + '" height="5" rx="2.5" fill="#fff" opacity=".3"/>';
     s += '<rect x="' + (x + 3) + '" y="' + (y + ch - 9) + '" width="' + (w - 6) + '" height="5" rx="2.5" fill="#000" opacity=".12"/>';
     s += "</g>";
-  }
+  });
   return s + "</svg>";
-}
-function chip(m, cur){
-  if (!cur) return '<span class="chip ok">Journée terminée 💖</span>';
-  if (m < ACTIVE[0].sm) return '<span class="chip neutral">Début dans ' + dur(ACTIVE[0].sm - m) + "</span>";
-  if (m > cur.em2) return '<span class="chip warn">Décalage de ' + dur(m - cur.em2) + "</span>";
-  return '<span class="chip ok">Pile à l\'heure ✓</span>';
-}
-function planBar(){
-  return planOf() === "B" ? '<div class="planbar"><span class="pi">⏱</span><span><b>Plan B activé</b> : atelier Lego après la pyramide (16h45). Fin toujours à 18h30.</span></div>' : "";
 }
 
 /* ================================================================ screens */
-var view = "home", stepId = null, dropNext = -1;
-
+var view = "home";
+function sinceHTML(){
+  var d = dayDiff(WEDDING, new Date());
+  if (d <= 0) return '<div class="since"><div class="n">Mariés depuis aujourd\'hui !</div><small>Samedi 24 octobre 2026</small></div>';
+  var y = Math.floor(d / 365.25), r = d - Math.round(y * 365.25), txt;
+  if (y < 1) txt = d + " jour" + (d > 1 ? "s" : "");
+  else txt = y + " an" + (y > 1 ? "s" : "") + (r > 0 ? " et " + r + " jour" + (r > 1 ? "s" : "") : "");
+  return '<div class="since"><div class="n">Mariés depuis ' + txt + '</div><small>Depuis le samedi 24 octobre 2026</small></div>';
+}
+function annivHTML(){
+  var today = new Date(), t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var year = t0.getFullYear(), next = new Date(year, 9, 24);
+  if (next < t0) { year++; next = new Date(year, 9, 24); }
+  var nth = year - 2026, days = dayDiff(t0, next);
+  if (nth <= 0) { nth = 1; next = new Date(2027, 9, 24); days = dayDiff(t0, next); }
+  var noce = NOCES[nth - 1] ? "noces de " + NOCES[nth - 1] : "";
+  if (days === 0) return '<div class="anniv"><span class="ai">🎂</span><span><b>Joyeux anniversaire de mariage !</b><small>' + nth + (nth > 1 ? "e" : "er") + " anniversaire" + (noce ? " · " + noce : "") + "</small></span></div>";
+  return '<div class="anniv"><span class="ai">🎂</span><span><b>' + (nth === 1 ? "1er" : nth + "e") + " anniversaire dans " + days + " jour" + (days > 1 ? "s" : "") + "</b><small>" +
+    (noce ? noce.charAt(0).toUpperCase() + noce.slice(1) + " · " : "") + "samedi 24 octobre " + year + "</small></span></div>";
+}
 function renderHome(){
-  var d = now(), ph = phase(d), n = stepsDone(), cur = current(), info = "";
-  if (ph === "before") {
-    var days = Math.round((WEDDING.getTime() - new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()) / 86400000);
-    info = '<span class="pill">' + (days === 1 ? "<b>Demain</b> c'est le grand jour !" : "<b>J-" + days + "</b> avant le grand jour") + "</span>";
-  } else if (ph === "day") {
-    var m = minOf(d);
-    info = '<div class="clock">' + fmt(m) + "</div>" + chip(m, cur);
-    var sch = scheduled(m);
-    if (cur && sch && sch !== cur && m > cur.em2) info += '<div class="prog-now">Au programme : <b>' + sch.t + "</b></div>";
-  } else info = '<span class="pill">Merci pour cette belle journée 💖</span>';
-
-  var main;
-  if (!cur) main = '<button class="brick yel" data-go="prog">' + studs(6) + "Revoir la journée</button>";
-  else {
-    var label = (n === 0 && nDone(cur) === 0) ? "Commencer ▶" : "Continuer ▶";
-    main = '<button class="brick yel" data-open="' + cur.id + '">' + studs(6) + "<span>" + label + "<small>" + cur.em + " " + cur.t + " · " + fmt(cur.sm) + "</small></span></button>";
-  }
   document.getElementById("home").innerHTML =
-    '<div class="hbar"><span class="datechip">' + studs(4) + 'Sam. 24 octobre</span><button class="round" data-set-open="1" aria-label="Réglages">⚙️</button></div>' +
-    '<div class="names">Mai-Anh &amp; Philippe</div><h1 class="title">Notre jour <i>J</i></h1>' +
-    '<div class="info">' + info + "</div>" + planBar() +
-    '<div class="heartbox">' + heartSVG(n, dropNext, n === N) + "</div>" +
-    '<div class="count">' + n + " brique" + (n > 1 ? "s" : "") + " sur " + N + "<span>Une brique posée à chaque étape validée</span></div>" +
-    '<div class="stack">' + main + '<button class="brick blu" data-go="prog">' + studs(6) + "Tout le programme</button></div>" +
-    '<p class="foot">Marche sans internet · tout reste sur ce téléphone</p>';
-  dropNext = -1;
+    '<div class="hbar"><span class="datechip">' + studs(4) + 'Sam. 24 octobre 2026</span><button class="round" data-set-open="1" aria-label="Réglages">⚙️</button></div>' +
+    '<div class="names">Mai-Anh &amp; Philippe</div><h1 class="big-title">Mariés <span>!</span></h1>' +
+    '<p class="where">Domaine de la Marbrière</p>' +
+    '<button class="heartbtn" data-heart="1" aria-label="Toucher le cœur">' + heartSVG(false) + "</button>" +
+    sinceHTML() + annivHTML() +
+    '<div class="stack">' +
+      '<button class="brick yel" data-go="msgs">' + studs(6) + "💌 Les félicitations</button>" +
+      '<button class="brick blu" data-go="day">' + studs(6) + "🧱 Notre journée, brique par brique</button>" +
+      '<button class="brick red" data-replay="1">' + studs(6) + "🎉 Rejouer la fête</button>" +
+    "</div>" +
+    '<p class="foot">Souvenir du 24 octobre 2026 · marche sans internet</p>';
 }
-
-function actHTML(a){
-  var r = ROLES[a.role], c = COL[r.c], d = isDone(a);
-  return '<button class="brick act ' + (d ? "done" : "white") + '" data-act="' + a.id + '" aria-pressed="' + d + '" style="--rc:' + c[0] + ";--rcd:" + c[1] + ";--tint:" + TINT[r.c] + '">' +
-    studs(5) + '<span class="ico">' + r.i + "</span>" +
-    '<span class="tx"><span class="who">' + r.n + '</span><span class="what">' + a.text + "</span>" +
-    (d ? '<span class="stamp">Fait à ' + hm(S.done[a.id]) + "</span>" : "") + "</span>" +
-    '<span class="tick">✓</span></button>';
-}
-function tags(st){
-  var t = "";
-  if (st.fixed) t += '<span class="tagx">⏰ Horaire fixe</span>';
-  if (st.tag) t += '<span class="tagx">🔀 ' + st.tag + "</span>";
-  if (st.moved) t += '<span class="tagx">⏱ Plan B</span>';
-  return t ? '<div class="tags">' + t + "</div>" : "";
-}
-function decideHTML(){
-  var p = S.plan;
-  var a = p === "A" ? "grn sel" : (p === "B" ? "white" : "grn"), b = p === "B" ? "org sel" : (p === "A" ? "white" : "org");
-  return '<div class="decide"><h3>⏱ Point horaire juste avant 15h00</h3><p>Agnès et Alex décident, puis préviennent le DJ et le groupe.</p>' +
-    '<div class="stack"><button class="brick ' + a + '" data-plan="A">' + studs(5) + "✅ On est à l'heure" + (p === "A" ? " · choisi" : "") + "</button>" +
-    '<button class="brick ' + b + '" data-plan="B">' + studs(5) + "⏱ Du retard : plan B" + (p === "B" ? " · choisi" : "") + "</button></div></div>";
-}
-
-function renderStep(){
-  var st = byId(stepId) || current() || ACTIVE[0]; stepId = st.id;
-  var c = COL[st.c], d = now(), ph = phase(d), done = stepDone(st);
-  var mini = "";
-  ACTIVE.forEach(function(s2){ mini += '<i class="' + (stepDone(s2) ? "on" : "") + (s2 === st ? " cur" : "") + '"></i>'; });
-  var dayInfo = "";
-  if (ph === "day" && !done) {
-    var m = minOf(d);
-    if (m < st.sm) dayInfo = '<span class="chip neutral">Dans ' + dur(st.sm - m) + "</span>";
-    else if (m <= st.em2) dayInfo = '<span class="chip ok">C\'est maintenant !</span>';
-    else dayInfo = '<span class="chip warn">Prévu jusqu\'à ' + fmt(st.em2) + "</span>";
-  }
-  var light = (st.c === "yel");
-  var html =
-    '<div class="sbar"><button class="round" data-home="1" aria-label="Accueil">🏠</button><div class="mini">' + mini + '</div><button class="round" data-go="prog" aria-label="Programme">📋</button></div>' +
-    '<div class="hero' + (light ? " lt" : "") + '" style="--c:' + c[0] + ";--cd:" + c[1] + '">' + studs(6) +
-      '<div class="row"><div class="emoji">' + st.em + '</div><div><div class="time">' + fmt(st.sm) + " – " + fmt(st.em2) + "</div><h2>" + st.t + "</h2></div></div>" +
-      '<div class="fun">' + st.fun + "</div>" + tags(st) + "</div>" +
-    (st.silence ? '<div class="silence"><span>🤫</span>Silence total</div>' : "") +
-    (dayInfo ? '<div class="daychip">' + dayInfo + "</div>" : "") +
-    (st.note ? '<div class="note">' + st.note + "</div>" : "") +
-    '<div class="acts">' + st.acts.map(actHTML).join("") + "</div>" +
-    (done ? '<div class="posed">🧱 Brique posée !</div>'
-          : ((st.acts.length > 1 || st.skip) ? '<div class="stack">' +
-              (st.acts.length > 1 ? '<button class="brick yel" data-all="' + st.id + '">' + studs(6) + "Tout est fait ! ✓</button>" : "") +
-              (st.skip ? '<button class="ghostbtn" data-skip="' + st.id + '">🔀 ' + st.skip + "</button>" : "") + "</div>" : "")) +
-    (st.decide ? decideHTML() : "");
-  var first = st.i === 0, last = st.i === N - 1;
-  document.getElementById("step").innerHTML = html +
-    '<div class="bottom"><div class="in">' +
-      '<button class="brick white nav' + (first ? " off" : "") + '" data-prev="1">' + studs(4) + "◀ Avant</button>" +
-      '<button class="brick ' + (done ? "grn" : "white") + " nav" + (last ? " off" : "") + '" data-next="1">' + studs(4) + "Après ▶</button>" +
-    "</div></div>";
-}
-
-function renderProg(){
-  var cur = current(), pl = planOf();
-  var html = '<div class="sbar"><button class="round" data-back="1" aria-label="Retour">◀</button><div class="ptitle">Le programme</div><button class="round" data-home="1" aria-label="Accueil">🏠</button></div>' +
-    '<div class="planswitch"><button class="' + (pl === "A" ? "on" : "") + '" data-plan="A">Programme normal</button><button class="' + (pl === "B" ? "on" : "") + '" data-plan="B">⏱ Plan B · retard</button></div>' + planBar();
-  ACTIVE.forEach(function(st, i){
-    if (i === 0 || ACTIVE[i - 1].p !== st.p) {
-      var P = PARTS[st.p], same = ACTIVE.filter(function(x){ return x.p === st.p; });
-      var a = Math.min.apply(null, same.map(function(x){ return x.sm; })), b = Math.max.apply(null, same.map(function(x){ return x.em2; }));
-      html += '<div class="part"><b>' + P.n + "</b><span>" + P.t + "</span><small>" + fmt(a) + " – " + fmt(b) + "</small></div>";
-    }
-    var dn = stepDone(st), tg = "";
-    if (st.silence) tg += '<i class="tag">silence</i>';
-    if (st.fixed) tg += '<i class="tag">horaire fixe</i>';
-    if (st.moved) tg += '<i class="tag" style="background:var(--org)">plan B</i>';
-    html += '<button class="prow' + (dn ? " done" : "") + (st === cur ? " cur" : "") + '" data-open="' + st.id + '">' +
-      '<span class="num">' + (dn ? "✓" : (i + 1)) + "</span>" +
-      '<span class="pt"><b>' + fmt(st.sm) + " – " + fmt(st.em2) + (st === cur ? " · en cours" : "") + "</b><span>" + st.t + tg + "</span></span>" +
-      '<span class="pe">' + st.em + "</span></button>";
+function renderMsgs(){
+  var html = '<div class="sbar"><button class="round" data-back="1" aria-label="Retour">◀</button><div class="ptitle">Félicitations</div><button class="round" data-heart="1" aria-label="Fête">🎉</button></div>' +
+    '<h2 class="ptitle2">Pour vous deux 💌</h2><p class="lead">Mai-Anh &amp; Philippe, mariés le 24 octobre 2026</p>';
+  MSGS.forEach(function(m){
+    var c = COL[m[1]];
+    html += '<div class="msg' + (m[1] === "yel" ? " lt" : "") + '" style="--c:' + c[0] + ";--cd:" + c[1] + '">' + studs(6) +
+      '<div class="me">' + m[0] + "</div><p>" + m[2] + "</p></div>";
   });
-  html += '<div class="info-card"><h4>Toute la journée</h4><p>📸 Photobooth · 🎙️ Livre d\'or audio · 🎨 Livre d\'or peinture · ⛲ Fontaine à vœux (au puits)</p></div>' +
-    '<div class="info-card"><h4>Espace igloo</h4><p>🧸 Coin enfants toute la journée · 🐺 Loup-garou avec les ados en fin de journée</p></div>';
-  document.getElementById("prog").innerHTML = html + '<p class="foot">Touche une étape pour l\'ouvrir</p>';
+  html += '<div class="thanks"><h4>Merci</h4>À tous ceux qui ont construit cette journée : le traiteur, le groupe et Tim, le DJ, l\'animation, la coordination du Domaine de la Marbrière, les fleurs… et à tous les invités !</div>' +
+    '<p class="endcard">Vive les mariés ! 💖</p><p class="foot">Touche 🎉 en haut pour faire la fête</p>';
+  document.getElementById("msgs").innerHTML = html;
 }
-
+function renderDay(){
+  var nd = DAY.filter(function(s){ return s.done; }).length;
+  var na = DAY.reduce(function(a, s){ return a + s.nDone; }, 0);
+  var html = '<div class="sbar"><button class="round" data-back="1" aria-label="Retour">◀</button><div class="ptitle">Notre journée</div><button class="round" data-replay="1" aria-label="Rejouer">🎉</button></div>' +
+    '<h2 class="ptitle2">Brique par brique 🧱</h2>' +
+    '<p class="lead">' + (na ? "Les heures où chaque étape a été validée" : "Le programme de la journée") + "</p>" +
+    '<div class="stats"><div class="stat"><b>' + (na ? nd : N) + '</b><small>étapes<br>' + (na ? "validées" : "au programme") + '</small></div>' +
+    '<div class="stat"><b>' + (na || "—") + "</b><small>petits moments<br>cochés</small></div>" +
+    '<div class="stat"><b>' + (PLAN === "B" ? "B" : "A") + "</b><small>" + (PLAN === "B" ? "plan B<br>(Lego reporté)" : "programme<br>normal") + "</small></div></div>";
+  DAY.forEach(function(st, i){
+    var when = st.done ? "Validée à " + hm(st.at) : (st.nDone ? st.nDone + " sur " + st.nActs + " · prévue à " + fmt(st.sm) : "Prévue à " + fmt(st.sm));
+    html += '<div class="drow' + (st.done ? "" : " todo") + '"><span class="num">' + (st.done ? "✓" : (i + 1)) + '</span><span class="pt"><b>' + when + "</b><span>" + st.t + '</span></span><span class="pe">' + st.em + "</span></div>";
+  });
+  html += '<p class="endcard">Et la musique s\'est arrêtée à 18h30… 🎶</p>';
+  document.getElementById("day").innerHTML = html;
+}
 function renderView(){
-  ["home", "step", "prog"].forEach(function(v){ document.getElementById(v).classList.toggle("on", v === view); });
-  if (view === "home") renderHome(); else if (view === "step") renderStep(); else renderProg();
+  ["home", "msgs", "day"].forEach(function(v){ document.getElementById(v).classList.toggle("on", v === view); });
+  if (view === "home") renderHome(); else if (view === "msgs") renderMsgs(); else renderDay();
 }
 
 /* ================================================================ navigation + brick wipe */
@@ -596,40 +474,24 @@ function buildWipe(dir){
     html += '<div class="row" style="--i:' + r + ";--from:" + from + ";--to:" + to + '">';
     var seed = (r * 7 + (dir === "back" ? 3 : 0)) % 8;
     for (var k = 0; k < 4; k++) {
-      var cn = WCOL[(seed + k * 3) % 8], c = COL[cn], wd = [3, 2, 4, 2, 3][(r + k) % 5];
+      var c = COL[WCOL[(seed + k * 3) % 8]], wd = [3, 2, 4, 2, 3][(r + k) % 5];
       html += '<div class="wb" style="--w:' + wd + ";--c:" + c[0] + ";--cd:" + c[1] + '"></div>';
     }
     html += "</div>";
   }
   w.innerHTML = html;
-  return w;
 }
 function wipe(dir, mid){
   busy = true;
   var w = document.getElementById("wipe");
-  if (reduce) {
-    w.className = "fade on"; w.innerHTML = "";
-    requestAnimationFrame(function(){ w.classList.add("in"); });
-    setTimeout(function(){ mid(); w.classList.remove("in"); setTimeout(function(){ w.className = ""; busy = false; }, 220); }, 220);
-    return;
-  }
-  buildWipe(dir); w.className = "on";
-  void w.offsetWidth;
-  w.classList.add("go"); w.classList.add("in");
-  setTimeout(function(){
-    mid();
-    w.classList.remove("in"); w.classList.add("out");
-    setTimeout(function(){ w.className = ""; w.innerHTML = ""; busy = false; }, 560);
-  }, 520);
+  if (reduce) { mid(); busy = false; return; }
+  buildWipe(dir); w.className = "on"; void w.offsetWidth; w.classList.add("go"); w.classList.add("in");
+  setTimeout(function(){ mid(); w.classList.remove("in"); w.classList.add("out");
+    setTimeout(function(){ w.className = ""; w.innerHTML = ""; busy = false; }, 560); }, 520);
 }
-function show(st, dir, instant){
-  var apply = function(){ view = st.v; if (st.id != null) stepId = st.id; renderView(); window.scrollTo(0, 0); };
-  if (instant) apply(); else wipe(dir || "fwd", apply);
-}
+function show(st, dir){ wipe(dir || "fwd", function(){ view = st.v; renderView(); window.scrollTo(0, 0); }); }
 function navPush(st){ stack.push(st); try { history.pushState({d:stack.length}, ""); } catch(e){} show(st, "fwd"); }
-function navReplace(st, dir){ stack[stack.length - 1] = st; try { history.replaceState({d:stack.length}, ""); } catch(e){} show(st, dir); }
 function navBack(){ if (stack.length > 1) history.back(); }
-function navHome(){ if (stack.length > 1) history.go(-(stack.length - 1)); }
 try { history.replaceState({d:1}, ""); } catch(e){}
 
 /* ================================================================ overlays */
@@ -648,59 +510,19 @@ function closeOverlay(then){
 }
 window.addEventListener("popstate", function(e){
   var d = (e.state && e.state.d) || 1;
-  if (ovlOpen) {
-    clearTimeout(ovlTimer); hideOverlay();
-    var p = pending; pending = null; if (p) p();
-    if (d >= stack.length) return;
-  }
+  if (ovlOpen) { clearTimeout(ovlTimer); hideOverlay(); var p = pending; pending = null; if (p) p(); if (d >= stack.length) return; }
   if (d < stack.length) { stack.length = d; show(stack[d - 1], "back"); }
 });
-
-var lastAction = [];
-function celebrate(st){
-  var n = stepsDone();
-  if (!current()) { finale(); return; }
-  var nx = nextOpenAfter(st.i);
-  sfx("chime"); haptic(); burst(70);
-  openOverlay('<div class="card">' +
-    '<div class="heartbox">' + heartSVG(n, n - 1, false) + "</div>" +
-    "<h2>Brique posée ! 🧱</h2>" +
-    '<p class="sub"><b>' + n + " sur " + N + "</b> · " + st.t + "</p>" +
-    (nx ? '<p class="sub">Ensuite : <b>' + nx.em + " " + nx.t + "</b> · " + fmt(nx.sm) + "</p>" : "") +
-    '<div class="stack"><button class="brick yel" data-cont="' + (nx ? nx.id : "") + '">' + studs(6) + "Continuer ▶</button>" +
-    '<button class="ghostbtn" data-undo="1">Oups, annuler</button></div></div>');
-}
-function finale(){
-  sfx("fanfare"); haptic(); burst(240); setTimeout(function(){ burst(160); }, 700);
-  openOverlay('<div class="card">' +
-    '<div class="heartbox">' + heartSVG(N, N - 1, true) + "</div>" +
-    "<h2>Félicitations !</h2>" +
+function party(title, sub, auto){
+  for (var k = 0; k < N; k++) (function(k){ setTimeout(function(){ sfx("snap", k); }, k * 150 + 380); })(k);
+  setTimeout(function(){ sfx("fanfare"); burst(220); setTimeout(function(){ burst(160); }, 600); }, N * 150 + 500);
+  if (!auto) haptic();
+  openOverlay('<div class="card"><div class="heartbox">' + heartSVG(true) + "</div>" +
+    "<h2>" + title + "</h2>" +
     '<p class="sub" style="font-family:Cal;font-style:italic;font-size:24px;color:#B08D57">Mai-Anh &amp; Philippe</p>' +
-    '<p class="sub">Les ' + N + ' briques sont posées : le cœur est complet 💖</p>' +
-    '<div class="stack"><button class="brick red" data-finale-close="1">' + studs(6) + "Fermer</button>" +
-    '<button class="ghostbtn" data-undo="1">Oups, annuler la dernière étape</button></div></div>', true);
-}
-function askPlan(target){
-  if (planOf() === target && S.plan) return;
-  if (target === "A" && !S.plan) { setPlan("A"); toast("Programme normal confirmé ✓"); return; }
-  var html = target === "B"
-    ? '<div class="card"><h2>⏱ Passer au plan B ?</h2>' +
-      '<p class="sub">Le brise-glace se fait <b>tout de suite après le final sportif</b>.</p>' +
-      '<p class="sub">L\'atelier Lego passe <b>après la pyramide</b> (16h45 – 17h10).</p>' +
-      '<p class="sub">TTMC et Loup-garou glissent d\'environ 10 min. Fin de la musique toujours à 18h30.</p>' +
-      '<div class="stack"><button class="brick org" data-plan-set="B">' + studs(6) + "Oui, plan B</button>" +
-      '<button class="ghostbtn" data-close="1">Non, on garde le programme</button></div></div>'
-    : '<div class="card"><h2>Revenir au programme normal ?</h2>' +
-      '<p class="sub">L\'atelier Lego revient à <b>15h00</b>, le brise-glace à 15h25.</p>' +
-      '<div class="stack"><button class="brick grn" data-plan-set="A">' + studs(6) + "Oui, programme normal</button>" +
-      '<button class="ghostbtn" data-close="1">Non, on reste en plan B</button></div></div>';
-  openOverlay(html, true);
-}
-var PLANMAP = {B:{lego:"brise", love:"brise"}, A:{legoB:"lego"}};
-function setPlan(target){
-  S.plan = target; save(); build();
-  if (stepId && !byId(stepId)) stepId = PLANMAP[target][stepId] || (current() ? current().id : ACTIVE[0].id);
-  for (var k = 0; k < stack.length; k++) if (stack[k].id && !byId(stack[k].id)) stack[k] = {v:"step", id:stepId};
+    '<p class="sub">' + sub + "</p>" +
+    '<div class="stack"><button class="brick red" data-close="1">' + studs(6) + "Merci ! 💖</button>" +
+    '<button class="ghostbtn" data-again="1">🎉 Encore !</button></div></div>', true);
 }
 function settings(){
   openOverlay('<div class="card" id="setcard"></div>');
@@ -709,43 +531,11 @@ function settings(){
 function renderSettings(){
   var el = document.getElementById("setcard"); if (!el) return;
   el.innerHTML = '<h2 style="text-align:left">Réglages</h2>' +
-    '<button class="setrow" data-tog="sound"><span class="si">🔊</span><span class="st"><b>Les sons</b><small>Le petit « clic » des briques</small></span><span class="sw' + (S.sound ? " on" : "") + '"></span></button>' +
-    '<button class="setrow" data-tog="awake"><span class="si">💡</span><span class="st"><b>Écran toujours allumé</b><small>Pratique le jour J</small></span><span class="sw' + (S.awake ? " on" : "") + '"></span></button>' +
-    '<button class="setrow" data-tog="sim"><span class="si">🧪</span><span class="st"><b>Mode essai</b><small>Faire comme si on était le 24 octobre</small></span><span class="sw' + (S.sim.on ? " on" : "") + '"></span></button>' +
-    '<div class="simctl' + (S.sim.on ? " on" : "") + '"><button data-sim="-15">− 15 min</button><output>' + fmt(S.sim.min) + '</output><button data-sim="15">+ 15 min</button></div>' +
-    '<button class="danger" data-reset="1">♻️ Tout remettre à zéro</button>' +
+    '<button class="setrow" data-tog="sound"><span class="si">🔊</span><span class="st"><b>Les sons</b><small>Les « clics » des briques et la fanfare</small></span><span class="sw' + (S.sound ? " on" : "") + '"></span></button>' +
     '<div class="stack" style="margin-top:18px"><button class="brick blu" data-close="1">' + studs(6) + "Fermer</button></div>";
 }
 
-/* ================================================================ actions */
-function toast(msg){
-  var t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove("show"); }, 2600);
-}
-function popAct(id){ var el = document.querySelector('[data-act="' + id + '"]'); if (el) { el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); } }
-function toggleAct(id){
-  var a = ACT[id]; if (!a) return;
-  if (isDone(a)) {
-    delete S.done[id]; save(); sfx("unclick"); haptic(); renderStep(); toast("Validation retirée");
-    return;
-  }
-  S.done[id] = now().getTime(); save(); sfx("click"); haptic(); renderStep(); popAct(id);
-  if (stepDone(a.step)) { lastAction = [id]; dropNext = stepsDone() - 1; setTimeout(function(){ celebrate(a.step); }, 420); }
-}
-function validateAll(id){
-  var st = byId(id); if (!st) return;
-  var t = now().getTime(), ids = [];
-  st.acts.forEach(function(a){ if (!S.done[a.id]) { S.done[a.id] = t; ids.push(a.id); } });
-  save(); sfx("click"); renderStep(); lastAction = ids; dropNext = stepsDone() - 1;
-  setTimeout(function(){ celebrate(st); }, 250);
-}
-function undoLast(){
-  lastAction.forEach(function(id){ delete S.done[id]; }); lastAction = []; dropNext = -1; save();
-  closeOverlay(function(){ renderView(); toast("C'est annulé"); });
-}
-
-/* ================================================================ burst of bricks */
+/* ================================================================ brick confetti */
 var cv = document.getElementById("fx"), cx = cv.getContext("2d"), parts = [], raf = 0;
 var PC = [["#DA291C","#A11D13"],["#FFC20E","#C99400"],["#0A6EBD","#06508A"],["#00A651","#007A3B"],["#F7901E","#BE6A0E"],["#EC6FA5","#B5477A"],["#36AEBF","#1F7F8C"]];
 function burst(n){
@@ -753,10 +543,8 @@ function burst(n){
   var dpr = window.devicePixelRatio || 1;
   cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
   n = Math.min(n, 420 - parts.length);
-  for (var i = 0; i < n; i++) {
-    parts.push({x: innerWidth / 2 + (Math.random() - .5) * 160, y: innerHeight * .35, vx: (Math.random() - .5) * 11, vy: -Math.random() * 13 - 5,
-      w: Math.random() < .5 ? 2 : 1, s: 10 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: PC[i % PC.length], life: 0});
-  }
+  for (var i = 0; i < n; i++) parts.push({x: innerWidth / 2 + (Math.random() - .5) * 160, y: innerHeight * .35, vx: (Math.random() - .5) * 11, vy: -Math.random() * 13 - 5,
+    w: Math.random() < .5 ? 2 : 1, s: 10 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: PC[i % PC.length], life: 0});
   if (!raf) raf = requestAnimationFrame(tick);
 }
 function tick(){
@@ -767,14 +555,20 @@ function tick(){
     cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r);
     var W = p.s * p.w, H = p.s * .8;
     cx.fillStyle = p.c[0]; cx.strokeStyle = p.c[1]; cx.lineWidth = 1.2;
-    for (var k = 0; k < p.w; k++) { cx.fillRect(-W / 2 + p.s * k + p.s * .22, -H / 2 - p.s * .22, p.s * .56, p.s * .26); }
+    for (var k = 0; k < p.w; k++) cx.fillRect(-W / 2 + p.s * k + p.s * .22, -H / 2 - p.s * .22, p.s * .56, p.s * .26);
     cx.fillRect(-W / 2, -H / 2, W, H); cx.strokeRect(-W / 2, -H / 2, W, H);
     cx.restore();
   });
   if (parts.length) raf = requestAnimationFrame(tick); else { raf = 0; cx.clearRect(0, 0, innerWidth, innerHeight); }
 }
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove("show"); }, 2400);
+}
+var LOVE = ["Vive les mariés ! 💖", "Bisous ! 💋", "Pour toujours 💍", "Que du bonheur ✨", "Encore bravo ! 🎉"], li = 0;
 
-/* ================================================================ events (with anti double-tap) */
+/* ================================================================ events */
 var lastTap = 0;
 document.addEventListener("click", function(ev){
   var t = ev.target.closest("button"); if (!t) return;
@@ -782,58 +576,31 @@ document.addEventListener("click", function(ev){
   if (busy || nowT - lastTap < 320) { ev.preventDefault(); return; }
   lastTap = nowT;
   var ds = t.dataset;
-  if (ds.act) { toggleAct(ds.act); return; }
-  if (ds.all) { validateAll(ds.all); return; }
-  if (ds.skip) { validateAll(ds.skip); return; }
-  if (ds.open !== undefined) { sfx("tap"); navPush({v:"step", id:ds.open}); return; }
-  if (ds.go === "prog") { sfx("tap"); if (view === "prog") return; navPush({v:"prog"}); return; }
-  if (ds.home) { sfx("tap"); navHome(); return; }
+  if (ds.go) { sfx("tap"); navPush({v:ds.go}); return; }
   if (ds.back) { sfx("tap"); navBack(); return; }
-  if (ds.prev) { var sp = byId(stepId); if (sp && sp.i > 0) { sfx("tap"); navReplace({v:"step", id:ACTIVE[sp.i - 1].id}, "back"); } return; }
-  if (ds.next) { var sn = byId(stepId); if (sn && sn.i < N - 1) { sfx("tap"); navReplace({v:"step", id:ACTIVE[sn.i + 1].id}, "fwd"); } return; }
-  if (ds.cont !== undefined) {
-    var nx = ds.cont;
-    closeOverlay(function(){ if (nx) { if (view === "step") navReplace({v:"step", id:nx}, "fwd"); else navPush({v:"step", id:nx}); } else renderView(); });
-    return;
-  }
-  if (ds.undo) { undoLast(); return; }
-  if (ds.plan) { sfx("tap"); askPlan(ds.plan); if (!ovlOpen) renderView(); return; }
-  if (ds.planSet) {
-    var target = ds.planSet;
-    closeOverlay(function(){ setPlan(target); renderView(); toast(target === "B" ? "Plan B activé ⏱" : "Programme normal ✓"); });
-    return;
-  }
-  if (ds.finaleClose) { closeOverlay(function(){ navHome(); renderView(); }); return; }
+  if (ds.heart) { sfx("chime"); haptic(); burst(90); toast(LOVE[li++ % LOVE.length]); return; }
+  if (ds.replay) { party("Félicitations !", "Toutes les briques sont posées : le cœur est complet 💖"); return; }
+  if (ds.again) { closeOverlay(function(){ setTimeout(function(){ party("Encore bravo !", "Vive les mariés ! 🎉"); }, 120); }); return; }
   if (ds.setOpen) { sfx("tap"); settings(); return; }
   if (ds.close) { closeOverlay(function(){ renderView(); }); return; }
-  if (ds.tog) {
-    if (ds.tog === "sound") { S.sound = !S.sound; if (S.sound) sfx("tap"); }
-    else if (ds.tog === "awake") { S.awake = !S.awake; setAwake(S.awake); }
-    else if (ds.tog === "sim") { S.sim.on = !S.sim.on; }
-    save(); renderSettings(); return;
-  }
-  if (ds.sim) { S.sim.min = Math.max(12 * 60, Math.min(19 * 60, S.sim.min + (+ds.sim))); save(); renderSettings(); return; }
-  if (ds.reset) {
-    if (!t.classList.contains("armed")) { t.classList.add("armed"); t.textContent = "Appuie encore pour confirmer"; setTimeout(function(){ if (t.isConnected) { t.classList.remove("armed"); t.textContent = "♻️ Tout remettre à zéro"; } }, 4000); return; }
-    S.done = {}; delete S.plan; save(); build(); closeOverlay(function(){ navHome(); renderView(); toast("Tout est remis à zéro"); });
-    return;
-  }
+  if (ds.tog === "sound") { S.sound = !S.sound; save(); if (S.sound) sfx("tap"); renderSettings(); return; }
 });
-ovl.addEventListener("click", function(ev){ if (ev.target === ovl && !document.querySelector("[data-cont],[data-finale-close]")) closeOverlay(function(){ renderView(); }); });
+ovl.addEventListener("click", function(ev){ if (ev.target === ovl) closeOverlay(function(){ renderView(); }); });
 
 /* ================================================================ start */
-setInterval(function(){ if (!S.sim.on && !busy && !ovlOpen) { if (view === "home") renderHome(); else if (view === "step") renderStep(); } }, 30000);
-document.addEventListener("visibilitychange", function(){ if (!document.hidden) { if (S.awake) setAwake(true); if (!ovlOpen) renderView(); } });
-if (S.awake) setAwake(true);
-save();
 renderView();
+if (!S.souvenir) {
+  S.souvenir = Date.now(); save();
+  setTimeout(function(){ party("La fête est finie…", "…et votre histoire commence ! 💖", true); }, 450);
+}
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   var hadCtrl = !!navigator.serviceWorker.controller, reloaded = false;
   navigator.serviceWorker.addEventListener("controllerchange", function(){ if (hadCtrl && !reloaded) { reloaded = true; location.reload(); } });
-  navigator.serviceWorker.register("sw.js").catch(function(){});
+  navigator.serviceWorker.register("sw.js", {updateViaCache: "none"}).then(function(reg){
+    document.addEventListener("visibilitychange", function(){ if (!document.hidden) reg.update().catch(function(){}); });
+  }).catch(function(){});
 }
-window.__jourj = {S:S, get ACTIVE(){ return ACTIVE; }, validateAll:validateAll, setPlan:function(p){ setPlan(p); renderView(); }, renderView:renderView,
-  go:function(v, id){ navPush({v:v, id:id}); }};
+window.__souvenir = {S:S, DAY:DAY, go:function(v){ navPush({v:v}); }, party:party};
 })();
 </script>
 </body>
