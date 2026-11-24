@@ -478,6 +478,48 @@ section.equip{border:0;border-radius:22px;box-shadow:var(--shadow);border-top:6p
 .tile.wide.c-bordeaux .ico{background:var(--gold)!important;color:#5c0d1d}
 .tile.wide.c-bordeaux .badge{background:var(--gold);color:#5c0d1d}
 .tile.wide.c-bordeaux .arrow{background:rgba(255,255,255,.15);color:var(--gold)}
+
+/* Actualités (reliées au blog du site) */
+.news-intro{color:var(--muted);margin:0 0 14px}
+.news-list{display:grid;gap:12px}
+.news-msg{color:var(--muted);margin:0}
+.news-card{display:flex;gap:14px;align-items:stretch;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;cursor:pointer}
+.news-card:hover{border-color:var(--bordeaux)}
+.news-card:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.news-card .nc-img{flex:none;width:112px;height:96px;border-radius:10px;object-fit:cover;background:var(--bordeaux-soft)}
+.news-card .nc-txt{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.news-card .nc-date{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--bordeaux)}
+.news-card .nc-title{font-family:var(--display);font-weight:700;font-size:16px;line-height:1.25;margin:3px 0 4px}
+.news-card .nc-ex{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-card.first{flex-direction:column;padding:0;overflow:hidden}
+.news-card.first .nc-img{width:100%;height:auto;aspect-ratio:16/9;border-radius:0}
+.news-card.first .nc-txt{padding:12px 14px 14px}
+.news-card.first .nc-title{font-size:19px}
+.news-new{display:inline-block;margin-left:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--bordeaux);border-radius:4px;padding:1px 6px;vertical-align:middle}
+.news-more{display:inline-block;margin-top:4px;color:var(--bordeaux);font-weight:600;text-decoration:none}
+.reader{position:fixed;inset:0;z-index:60;background:#f5f3f3;color:#1b1517;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.reader-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;background:rgba(245,243,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid #e4dddf}
+.reader-back{border:0;background:var(--bordeaux);color:#fff;font:inherit;font-weight:700;font-size:15px;padding:9px 14px;border-radius:10px;cursor:pointer}
+.reader-site{margin-left:auto;color:var(--bordeaux);font-weight:600;font-size:14px;text-decoration:none}
+.reader-body{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+.reader-body .art-eyebrow{margin-top:4px}
+.reader-body h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,34px);line-height:1.12;margin:6px 0 16px;color:#1b1517}
+.reader-body p{margin:0 0 14px;line-height:1.6}
+.reader-body h2,.reader-body h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.25;margin:26px 0 10px;color:var(--bordeaux)}
+.reader-body figure{margin:8px 0 22px}
+.reader-body figure img,.reader-body figure video{display:block;width:100%;height:auto;border-radius:12px;background:#eadfe2}
+.reader-body figure img{max-height:80vh;object-fit:contain}
+.reader-body figcaption{font-size:13px;color:#6c6266;font-style:italic;margin-top:6px}
+.reader-body blockquote{margin:22px 0;padding:18px 20px;background:var(--bordeaux-soft);border-radius:12px;color:var(--bordeaux);font-family:var(--display);font-weight:700;font-size:18px;line-height:1.4;font-style:italic}
+.reader-body blockquote p{margin:0}
+.reader-body a{color:var(--bordeaux)}
+.reader-body ul,.reader-body ol{margin:0 0 14px;padding-left:22px}
+.yt{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;border-radius:12px;overflow:hidden;background:#000;cursor:pointer}
+.yt img{width:100%;height:100%;object-fit:cover;opacity:.85;border-radius:0!important;max-height:none!important}
+.yt span{position:absolute;inset:0;display:grid;place-items:center}
+.yt span::before{content:"";width:68px;height:48px;border-radius:12px;background:#d41f2c}
+.yt span::after{content:"";position:absolute;border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;margin-left:4px}
+.yt-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block}
 /* Article « À la une » */
 section.art p{margin:0 0 14px;max-width:65ch}
 section.art h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.25;margin:26px 0 10px;color:var(--bordeaux)}
@@ -506,55 +548,11 @@ section.art .art-end{font-style:italic;color:var(--muted);margin-top:18px}
 
   <nav class="grid" id="tiles" aria-label="Accès rapides"></nav>
 
-  <section class="equip art" id="marion">
-    <div class="art-eyebrow">Portrait · Novembre 2026</div>
-    <h2>Marion Jaime, la force tranquille du karaté niçois</h2>
-    <p class="art-chapo">Elle ne cherche jamais la lumière. Pourtant, depuis des années, elle est partout où l&#x27;on a besoin d&#x27;elle : auprès des femmes victimes de violences (Fight for Dignity, etc.), au chevet des enfants hospitalisés (Premiers de Cordée, Fondation Lenval, etc.), sur le tatami comme coach d&#x27;une athlète de para-karaté championne de France. Vice-présidente du karaté des Alpes-Maritimes, vice-présidente de la Ligue PACA, présidente du club le plus médaillé de Nice en kata : Marion Jaime est une légende discrète. Il est temps de raconter son histoire.</p>
-    <h3>Celle qui ne dit jamais rien</h3>
-    <p>Niçoise de naissance, maman et pilier de sa famille, Marion Jaime mène plusieurs vies en une. Le jour, elle dirige sa propre entreprise de peinture en bâtiment. Le soir et le week-end, elle préside Karaté Makoto Nice Saint-Roch.</p>
-    <p>Et partout ailleurs, elle donne. Son temps, son énergie, son cœur. Toujours bénévolement. Toujours en silence.</p>
-    <p>Il y a des gens qui parlent beaucoup de ce qu&#x27;ils font. Marion, elle, fait beaucoup et n&#x27;en parle jamais. Elle ne réclame ni remerciement, ni photo, ni médaille. Pour elle, aider n&#x27;a rien d&#x27;exceptionnel : c&#x27;est simplement ce qu&#x27;on fait.</p>
-    <p>Ceux qui l&#x27;ont croisée sur un tatami, dans un couloir d&#x27;hôpital ou dans une salle d&#x27;accueil le savent pourtant. Ce qu&#x27;elle fait est rare.</p>
-    <h3>Fight for Dignity : redonner de la force à celles qui l&#x27;ont perdue</h3>
-    <p>C&#x27;est peut-être là que son engagement prend tout son sens. Marion Jaime est la représentante de Fight for Dignity pour les Alpes-Maritimes.</p>
-    <p>Créée en 2017 par Laurence Fischer, championne du monde de karaté, l&#x27;association accompagne les femmes qui ont vécu des violences. Son outil : un karaté adapté, pensé pour les aider à reprendre confiance, à se réapproprier leur corps, à se relever.</p>
-    <p>À Nice, les séances ont lieu à la Maison des femmes des Alpes-Maritimes, au CHU. Ici, ni compétition ni podium. Il y a des femmes qui arrivent blessées, et qui, séance après séance, se redressent. Un regard qui se relève. Un premier geste assuré. Un sourire qui revient.</p>
-    <p>Depuis 2026, Marion y enseigne la méthode Fight for Dignity. Pour elle, c&#x27;est un honneur bien plus qu&#x27;une mission : « Je suis hyper fière et honorée de rejoindre le collectif des enseignantes de Fight for Dignity. » Son souhait : que cette méthode trouve toute sa place dans le parcours de soin des femmes victimes de violences.</p>
-    <figure><img src="actu/marion/ffd-marion.jpg" alt="Marion, enseignante Fight for Dignity à Nice." width="1078" height="1350" loading="lazy"><figcaption>Marion, enseignante Fight for Dignity à Nice.</figcaption></figure>
-    <p>Marion est là pour ces moments-là. Avec patience, avec douceur, avec une force tranquille qui rassure. Ce travail ne se voit pas. Mais il change des vies.</p>
-    <figure><img src="actu/marion/ffd-collectif.jpg" alt="Marion aux côtés du collectif des enseignants Fight for Dignity." width="1080" height="1350" loading="lazy"><figcaption>Marion aux côtés du collectif des enseignants Fight for Dignity.</figcaption></figure>
-    <h3>Premiers de Cordée : un sourire au chevet des enfants</h3>
-    <p>Autre engagement, même cœur. Avec l&#x27;association Premiers de Cordée, Marion va à la rencontre des enfants hospitalisés ou en situation de handicap, notamment à la Fondation Lenval.</p>
-    <p>Dans ces chambres, les journées sont longues. Les soins, les examens, l&#x27;attente. Alors quand Marion arrive avec le karaté, quelque chose change. Pendant quelques minutes, l&#x27;enfant n&#x27;est plus un patient. Il redevient un enfant qui bouge, qui lance son premier kiai, qui rit.</p>
-    <p>Ces moments-là n&#x27;apparaissent dans aucun palmarès. Mais pour un enfant malade et pour ses parents, ils valent toutes les médailles du monde.</p>
-    <figure><video src="actu/marion/premiers-de-cordee.mp4" poster="actu/marion/premiers-de-cordee-poster.jpg" controls playsinline preload="none" controlslist="nodownload" width="1280" height="720"></video><figcaption>Reportage France 3 Côte d&#x27;Azur, diffusé avec autorisation.</figcaption></figure>
-    <h3>Une athlète avant d&#x27;être une coach</h3>
-    <p>Avant de transmettre, Marion a combattu. Sur les tapis de compétition, elle a brillé en kata, en individuel comme en équipe, sous les couleurs de Makoto.</p>
-    <p>Des années d&#x27;exigence, de rigueur et d&#x27;esprit d&#x27;équipe. C&#x27;est là qu&#x27;elle a appris ce qu&#x27;elle transmet aujourd&#x27;hui : on ne gagne jamais seule, et chaque victoire se construit dans l&#x27;ombre.</p>
-    <figure><img src="actu/marion/open-alpes-maritimes.jpg" alt="Marion en kata à l&#x27;Open des Alpes-Maritimes." width="1333" height="2000" loading="lazy"><figcaption>Marion en kata à l&#x27;Open des Alpes-Maritimes.</figcaption></figure>
-    <figure><img src="actu/marion/competition.jpg" alt="Marion en compétition." width="960" height="614" loading="lazy"><figcaption>Marion en compétition.</figcaption></figure>
-    <figure><img src="actu/marion/equipe-kata.jpg" alt="Avec l&#x27;équipe de kata du club. © Pink Mérie" width="1077" height="728" loading="lazy"><figcaption>Avec l&#x27;équipe de kata du club. © Pink Mérie</figcaption></figure>
-    <h3>Mai-Anh Ngo : jusqu&#x27;au titre de championne de France</h3>
-    <p>Sur le tatami aussi, Marion fait des merveilles. Elle entraîne Mai-Anh Ngo, athlète de para-karaté.</p>
-    <p>Ensemble, elles ont construit un kata sur mesure. Chaque détail, chaque intention, chaque respiration. Des heures d&#x27;entraînement, de patience et de confiance. Jusqu&#x27;au jour où Mai-Anh Ngo est devenue championne de France de para-karaté en kata.</p>
-    <p>Mai-Anh est une athlète d&#x27;exception : para-nageuse multimédaillée, juriste, porteuse de la flamme paralympique en 2024. Et derrière son titre de karaté, il y a une coach qui a cru en elle dès le premier jour.</p>
-    <h3>Makoto Nice Saint-Roch : le club qui fait briller Nice</h3>
-    <p>Marion préside Karaté Makoto Nice Saint-Roch, installé salle Serge Leyrit, au cœur du quartier Saint-Roch. Plus de 150 licenciés, et une référence : depuis plus de 20 ans, c&#x27;est le club qui rapporte le plus de médailles en kata à la ville de Nice.</p>
-    <p>Mais sous sa présidence, le club ne se contente pas de gagner. Il donne. Ses bénévoles interviennent dans des centres de recherche, des centres pour enfants maltraités, des centres pour femmes victimes de violences, des centres de lutte contre le cancer.</p>
-    <p>Pas de caméras. Pas de communiqués. Juste des gens qui viennent, qui transmettent, et qui repartent. À l&#x27;image de leur présidente.</p>
-    <figure><img src="actu/marion/competiteurs-makoto.jpg" alt="L&#x27;esprit Makoto : les sourires après la compétition." width="1400" height="788" loading="lazy"><figcaption>L&#x27;esprit Makoto : les sourires après la compétition.</figcaption></figure>
-    <h3>Une dirigeante reconnue</h3>
-    <p>Son engagement dépasse les murs du club. Marion Jaime est vice-présidente du Comité départemental de karaté des Alpes-Maritimes et vice-présidente de la Ligue régionale Provence-Alpes-Côte d&#x27;Azur de karaté.</p>
-    <p>Des responsabilités lourdes, qu&#x27;elle assume comme tout le reste : avec sérieux, sans bruit, au service des autres.</p>
-    <figure><img src="actu/marion/ceremonie-cd06.jpg" alt="Lors d&#x27;une cérémonie du Comité départemental de karaté des Alpes-Maritimes." width="1400" height="872" loading="lazy"><figcaption>Lors d&#x27;une cérémonie du Comité départemental de karaté des Alpes-Maritimes.</figcaption></figure>
-    <h3>Merci, Marion</h3>
-    <p>Il y a des personnes qu&#x27;on remarque parce qu&#x27;elles parlent fort. Et il y a celles qu&#x27;on finit par remarquer parce que, partout où elles passent, les choses vont mieux. Marion Jaime fait partie de celles-là.</p>
-    <p>Des femmes qui se relèvent. Des enfants qui sourient à l&#x27;hôpital. Une athlète de para-karaté championne de France. Un club qui fait briller Nice depuis vingt ans. Derrière tout ça, il y a une femme forte qui n&#x27;a jamais rien demandé, et à qui l&#x27;on ne dit pas assez merci.</p>
-    <blockquote class="art-quote">Pendant que certains prennent toute la lumière, d&#x27;autres deviennent la lumière de ceux que personne ne regarde.</blockquote>
-    <p>Alors aujourd&#x27;hui, on le dit. Merci, Marion.</p>
-    <p class="art-end">Et encore, on ne vous a même pas parlé de son amour pour les animaux…</p>
+  <section class="equip" id="actualites">
+    <h2>Actualités</h2>
+    <p class="news-intro">Toute la vie du club, publiée en même temps sur le site makotonice.com.</p>
+    <div id="news-list" class="news-list" aria-live="polite"><p class="news-msg">Chargement des actualités…</p></div>
   </section>
-
   <section class="equip about c-grey" id="qui-sommes-nous">
     <h2>Qui sommes-nous</h2>
     <div class="makoto">
@@ -927,7 +925,7 @@ section.art .art-end{font-style:italic;color:var(--muted);margin-top:18px}
 const MISE_A_JOUR = "novembre 2026";
 
 const ACCES = [
-  { id:"marion", c:"bordeaux", badge:"À la une", titre:"Marion, la force tranquille", desc:"Le portrait de notre présidente", url:"#marion", icon:"star", wide:true },
+  { id:"actualites", c:"bordeaux", badge:"Actualités", titre:"Les actus du club", desc:"Toutes les nouvelles de Makoto", url:"#actualites", icon:"star", wide:true },
   { id:"qui-sommes-nous", c:"bdx", badge:"", titre:"Makoto : qui sommes-nous ?", desc:"Notre histoire, nos valeurs", url:"#qui-sommes-nous", icon:"kanji" },
   { id:"saint-andre", c:"blue", badge:"Nouveau", titre:"Makoto Saint-André", desc:"Le nouveau dojo", url:"#saint-andre", icon:"pin" },
   { id:"blanche-castille", c:"ink", badge:"", titre:"Blanche de Castille", desc:"École, collège et dojo", url:"#blanche-castille", icon:"school" },
@@ -1006,6 +1004,115 @@ b.addEventListener("click",()=>{const r=matchMedia("(prefers-reduced-motion: red
 (function(){const q=document.getElementById("lx-q");if(!q)return;const norm=t=>t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 q.addEventListener("input",()=>{const v=norm(q.value.trim());document.querySelectorAll("#lexique .lx li").forEach(li=>{li.hidden=v&&!norm(li.dataset.q).includes(v)});});})();
 document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
+</script>
+
+<div id="reader" class="reader" hidden>
+  <div class="reader-bar"><button type="button" class="reader-back" id="reader-back">← Retour</button><a class="reader-site" id="reader-site" href="https://www.makotonice.com" target="_blank" rel="noopener">Voir sur le site</a></div>
+  <article class="reader-body" id="reader-body"></article>
+</div>
+<script>
+/* ====== ACTUALITÉS : reliées au blog du site makotonice.com (Wix) ======
+   Toute actu publiée sur le blog du site apparaît ici automatiquement. */
+(function(){
+  var CLIENT_ID="28c75079-017e-450f-9b45-60ce654f21b5";
+  var API="https://www.wixapis.com";
+  var SITE="https://www.makotonice.com";
+  var listEl=document.getElementById("news-list"), reader=document.getElementById("reader"),
+      body=document.getElementById("reader-body"), back=document.getElementById("reader-back"), siteLink=document.getElementById("reader-site");
+  var posts=[];
+  function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}catch(e){return null}}
+  function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function img(id){return "https://static.wixstatic.com/media/"+id}
+  function imgUrl(src){if(!src)return"";if(src.url)return src.url.replace(/^http:/,"https:");if(src.id)return "https://static.wixstatic.com/media/"+src.id;return""}
+  function fmtDate(d){try{return new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})}catch(e){return""}}
+  function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/.exec(u||"");return m?m[1]:null}
+  async function token(){
+    var rt=ls("mk-wix-rt"), r, j;
+    if(rt){r=await fetch(API+"/oauth2/token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({clientId:CLIENT_ID,grantType:"refresh_token",refreshToken:rt})});
+      if(r.ok){j=await r.json();if(j.access_token){if(j.refresh_token)ls("mk-wix-rt",j.refresh_token);return j.access_token}}}
+    r=await fetch(API+"/oauth2/token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({clientId:CLIENT_ID,grantType:"anonymous"})});
+    j=await r.json(); if(!j.access_token)throw new Error("token"); if(j.refresh_token)ls("mk-wix-rt",j.refresh_token); return j.access_token;
+  }
+  async function load(){
+    var t=await token();
+    var r=await fetch(API+"/blog/v3/posts/query",{method:"POST",headers:{"Content-Type":"application/json","Authorization":t},
+      body:JSON.stringify({query:{sort:[{fieldName:"firstPublishedDate",order:"DESC"}],paging:{limit:50}},fieldsets:["RICH_CONTENT","URL"]})});
+    if(!r.ok)throw new Error("posts "+r.status);
+    var j=await r.json(); return j.posts||[];
+  }
+  function cover(p){
+    if(p.media&&p.media.wixMedia&&p.media.wixMedia.image&&p.media.wixMedia.image.id)return img(p.media.wixMedia.image.id,640);
+    var found="";
+    (function walk(ns){(ns||[]).some(function(n){
+      if(n.type==="IMAGE"&&n.imageData&&n.imageData.image){found=imgUrl(n.imageData.image.src,640);return true}
+      if(n.type==="VIDEO"&&n.videoData&&n.videoData.thumbnail){found=imgUrl(n.videoData.thumbnail.src,640);return !!found}
+      walk(n.nodes);return !!found;})})(p.richContent&&p.richContent.nodes);
+    return found||"icon-512.png";
+  }
+  function postUrl(p){if(p.url&&p.url.base)return p.url.base+(p.url.path||"");return SITE+"/post/"+p.slug}
+  function render(){
+    if(!posts.length){listEl.innerHTML='<p class="news-msg">Pas encore d’actualité.</p>';return}
+    var seen=ls("mk-news-seen")||"";
+    listEl.innerHTML=posts.map(function(p,i){
+      var isNew=seen&&p.firstPublishedDate>seen;
+      return '<button type="button" class="news-card'+(i===0?" first":"")+'" data-slug="'+esc(p.slug)+'"><img class="nc-img" src="'+esc(cover(p))+'" alt="" loading="lazy"><span class="nc-txt"><span class="nc-date">'+esc(fmtDate(p.firstPublishedDate))+(isNew?'<span class="news-new">Nouveau</span>':'')+'</span><span class="nc-title">'+esc(p.title)+'</span><span class="nc-ex">'+esc(p.excerpt||"")+'</span></span></button>';
+    }).join("");
+    var tile=document.getElementById("acces-actualites");
+    if(tile){var d=tile.querySelector(".t-desc");if(d)d.textContent="Dernière : "+posts[0].title;
+      if(seen&&posts[0].firstPublishedDate>seen){var b=tile.querySelector(".badge");if(b)b.textContent="Nouveau"}}
+  }
+  function text(n){
+    if(n.type==="TEXT"){var t=esc(n.textData.text).replace(/\n/g,"<br>");
+      (n.textData.decorations||[]).forEach(function(d){
+        if(d.type==="BOLD")t="<strong>"+t+"</strong>";
+        else if(d.type==="ITALIC")t="<em>"+t+"</em>";
+        else if(d.type==="UNDERLINE")t="<u>"+t+"</u>";
+        else if(d.type==="LINK"&&d.linkData&&d.linkData.link&&d.linkData.link.url)t='<a href="'+esc(d.linkData.link.url)+'" target="_blank" rel="noopener">'+t+'</a>';
+      });return t}
+    return kids(n);
+  }
+  function kids(n){return (n.nodes||[]).map(node).join("")}
+  function node(n){
+    switch(n.type){
+      case "PARAGRAPH": var c=kids(n); return c.trim()?"<p>"+c+"</p>":"";
+      case "TEXT": return text(n);
+      case "HEADING": return "<h2>"+kids(n)+"</h2>";
+      case "BLOCKQUOTE": return "<blockquote>"+kids(n)+"</blockquote>";
+      case "BULLETED_LIST": return "<ul>"+kids(n)+"</ul>";
+      case "ORDERED_LIST": return "<ol>"+kids(n)+"</ol>";
+      case "LIST_ITEM": return "<li>"+kids(n).replace(/<\/?p>/g,"")+"</li>";
+      case "IMAGE": var im=n.imageData&&n.imageData.image; if(!im)return"";
+        return '<figure><img src="'+esc(imgUrl(im.src))+'" alt="'+esc(n.imageData.altText||"")+'"'+(im.width?' width="'+im.width+'" height="'+im.height+'"':'')+' loading="lazy" oncontextmenu="return false"></figure>';
+      case "VIDEO": var v=n.videoData&&n.videoData.video; if(!v)return"";
+        var th=n.videoData.thumbnail?imgUrl(n.videoData.thumbnail.src):"";
+        if(v.src&&v.src.url&&ytId(v.src.url)){var id=ytId(v.src.url);
+          return '<figure><button type="button" class="yt" data-yt="'+id+'" aria-label="Lire la vidéo"><img src="https://img.youtube.com/vi/'+id+'/hqdefault.jpg" alt=""><span></span></button></figure>'}
+        var vs=v.src&&v.src.id?"https://video.wixstatic.com/video/"+v.src.id+"/file":(v.src&&v.src.url)||"";
+        return vs?'<figure><video src="'+esc(vs)+'"'+(th?' poster="'+esc(th)+'"':'')+' controls playsinline preload="none" controlslist="nodownload"></video></figure>':"";
+      default: return kids(n);
+    }
+  }
+  function open(slug,push){
+    var p=posts.filter(function(x){return x.slug===slug})[0]; if(!p)return false;
+    body.innerHTML='<div class="art-eyebrow">'+esc(fmtDate(p.firstPublishedDate))+'</div><h1>'+esc(p.title)+'</h1>'+((p.richContent&&p.richContent.nodes)||[]).map(node).join("");
+    siteLink.href=postUrl(p);
+    reader.hidden=false; reader.scrollTop=0; document.documentElement.style.overflow="hidden";
+    if(push)history.pushState({actu:slug},"","#actu="+encodeURIComponent(slug));
+    return true;
+  }
+  function close(){reader.hidden=true;body.innerHTML="";document.documentElement.style.overflow=""}
+  back.addEventListener("click",function(){if(history.state&&history.state.actu)history.back();else{close();history.replaceState(null,"","#actualites")}});
+  addEventListener("popstate",function(){var m=/^#actu=(.+)$/.exec(location.hash);if(m)open(decodeURIComponent(m[1]),false);else close()});
+  body.addEventListener("click",function(e){var b=e.target.closest(".yt");if(!b)return;
+    b.outerHTML='<iframe class="yt-frame" src="https://www.youtube-nocookie.com/embed/'+b.dataset.yt+'?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'});
+  listEl.addEventListener("click",function(e){var c=e.target.closest(".news-card");if(c)open(c.dataset.slug,true)});
+  var cached=ls("mk-news"); if(cached){try{posts=JSON.parse(cached);render()}catch(e){}}
+  load().then(function(ps){posts=ps;ls("mk-news",JSON.stringify(ps));render();
+    if(!ls("mk-news-seen")&&ps[0])ls("mk-news-seen",ps[0].firstPublishedDate);
+    var m=/^#actu=(.+)$/.exec(location.hash);if(m)open(decodeURIComponent(m[1]),false);
+  }).catch(function(){ if(!posts.length)listEl.innerHTML='<p class="news-msg">Impossible de charger les actualités pour le moment. Vérifie ta connexion, ou retrouve-les sur <a class="news-more" href="'+SITE+'" target="_blank" rel="noopener">makotonice.com</a>.</p>'; });
+  document.getElementById("actualites").addEventListener("click",function(){if(posts[0])ls("mk-news-seen",posts[0].firstPublishedDate)},{once:true});
+})();
 </script>
 <div id="inst" class="inst" hidden>
   <div class="inst-card">
