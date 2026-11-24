@@ -520,6 +520,14 @@ section.equip{border:0;border-radius:22px;box-shadow:var(--shadow);border-top:6p
 .yt span::before{content:"";width:68px;height:48px;border-radius:12px;background:#d41f2c}
 .yt span::after{content:"";position:absolute;border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;margin-left:4px}
 .yt-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block}
+
+.une{grid-column:1/-1;position:relative;display:block;width:100%;padding:0;border:0;border-radius:16px;overflow:hidden;cursor:pointer;background:#5c0d1d;color:#fff;text-align:left;font:inherit;aspect-ratio:16/10;box-shadow:0 8px 24px rgba(92,13,29,.25)}
+.une img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.une::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(40,6,14,.88) 100%)}
+.une-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:16px 18px}
+.une-lbl{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#5c0d1d;background:var(--gold);padding:3px 8px;border-radius:4px}
+.une-title{display:block;font-family:var(--display);font-weight:800;font-size:clamp(19px,5vw,24px);line-height:1.15;margin-top:8px;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.une:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 /* Article « À la une » */
 section.art p{margin:0 0 14px;max-width:65ch}
 section.art h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.25;margin:26px 0 10px;color:var(--bordeaux)}
@@ -925,7 +933,7 @@ section.art .art-end{font-style:italic;color:var(--muted);margin-top:18px}
 const MISE_A_JOUR = "novembre 2026";
 
 const ACCES = [
-  { id:"actualites", c:"bordeaux", badge:"Actualités", titre:"Les actus du club", desc:"Toutes les nouvelles de Makoto", url:"#actualites", icon:"star", wide:true },
+  { id:"actualites", c:"bordeaux", badge:"", titre:"Actualités", desc:"Toutes les nouvelles du club", url:"#actualites", icon:"star" },
   { id:"qui-sommes-nous", c:"bdx", badge:"", titre:"Makoto : qui sommes-nous ?", desc:"Notre histoire, nos valeurs", url:"#qui-sommes-nous", icon:"kanji" },
   { id:"saint-andre", c:"blue", badge:"Nouveau", titre:"Makoto Saint-André", desc:"Le nouveau dojo", url:"#saint-andre", icon:"pin" },
   { id:"blanche-castille", c:"ink", badge:"", titre:"Blanche de Castille", desc:"École, collège et dojo", url:"#blanche-castille", icon:"school" },
@@ -1057,8 +1065,13 @@ document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
       var isNew=seen&&p.firstPublishedDate>seen;
       return '<button type="button" class="news-card'+(i===0?" first":"")+'" data-slug="'+esc(p.slug)+'"><img class="nc-img" src="'+esc(cover(p))+'" alt="" loading="lazy"><span class="nc-txt"><span class="nc-date">'+esc(fmtDate(p.firstPublishedDate))+(isNew?'<span class="news-new">Nouveau</span>':'')+'</span><span class="nc-title">'+esc(p.title)+'</span><span class="nc-ex">'+esc(p.excerpt||"")+'</span></span></button>';
     }).join("");
+    var tiles=document.getElementById("tiles"), une=document.getElementById("une");
+    if(tiles){ if(!une){une=document.createElement("button");une.type="button";une.id="une";une.className="une";tiles.prepend(une);
+        une.addEventListener("click",function(){open(une.dataset.slug,true)});}
+      var p0=posts[0]; une.dataset.slug=p0.slug;
+      une.innerHTML='<img src="'+esc(cover(p0))+'" alt=""><span class="une-txt"><span class="une-lbl">À la une</span><span class="une-title">'+esc(p0.title)+'</span></span>'; }
     var tile=document.getElementById("acces-actualites");
-    if(tile){var d=tile.querySelector(".t-desc");if(d)d.textContent="Dernière : "+posts[0].title;
+    if(tile){var d=tile.querySelector(".t-desc");
       if(seen&&posts[0].firstPublishedDate>seen){var b=tile.querySelector(".badge");if(b)b.textContent="Nouveau"}}
   }
   function text(n){
