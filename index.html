@@ -1158,6 +1158,7 @@ document.getElementById("maj").textContent = "Mis à jour " + MISE_A_JOUR;
   if(q.get("src")==="apk"||/; wv\)/.test(ua)){try{localStorage.setItem("mk-app","1")}catch(e){} app=true;}
   try{if(localStorage.getItem("mk-app")==="1")app=true}catch(e){}
   if(app||matchMedia("(display-mode: standalone)").matches||navigator.standalone===true)return;
+  if(/^#actu=/.test(location.hash)&&!forced)return; /* lien d'article partagé : lecture directe, sans obliger à installer */
   var android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.maxTouchPoints>1&&/Macintosh/.test(ua));
   if(forced==="android"){android=true;ios=false} if(forced==="ios"){ios=true;android=false}
   if(!android&&!ios)return;
